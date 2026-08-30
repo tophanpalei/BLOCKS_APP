@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildMate — Quality Cement Blocks & Bricks</title>
+  <meta name="description" content="BuildMate — Premium cement blocks, bricks, and construction materials. Order online with fast delivery.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">
+    <div class="brand-icon">🧱</div>
+    <div>
+      <div>BuildMate</div>
+      <div style="font-size:0.65rem;font-weight:400;color:var(--text-muted);margin-top:-2px">Blocks & Bricks</div>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="track-order.html">Track Order</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="admin.html" style="color:var(--text-muted)">Admin</a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+    <a href="cart.html" class="cart-btn">
+      🛒 Cart
+      <span class="cart-badge" style="display:none">0</span>
+    </a>
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO SLIDER -->
+<section class="hero" id="home">
+  <div class="slider" id="main-slider">
+
+    <!-- Slide 1 -->
+    <div class="slide">
+      <div class="slide-bg" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"></div>
+      <div class="slide-content">
+        <span class="slide-tag">⭐ Premium Quality</span>
+        <h1>Build Your Dreams with <span>Quality Blocks</span></h1>
+        <p>Premium cement blocks and bricks for every construction need. Trusted by thousands of homeowners and contractors across the region.</p>
+        <div class="hero-btns">
+          <a href="products.html" class="btn-primary">🛒 Shop Now</a>
+          <a href="#about" class="btn-outline">Learn More</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+      <div class="slide-bg" style="background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 50%, #6b3d2a 100%)"></div>
+      <div class="slide-content">
+        <span class="slide-tag">🏗 New Arrival</span>
+        <h1>Eco-Friendly <span>Fly Ash Bricks</span></h1>
+        <p>Lightweight, strong, and environmentally friendly. Our fly ash bricks offer superior insulation and help reduce carbon footprint.</p>
+        <div class="hero-btns">
+          <a href="products.html?category=bricks" class="btn-primary">View Bricks</a>
+          <a href="#contact" class="btn-outline">Get Quote</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+      <div class="slide-bg" style="background: linear-gradient(135deg, #0d2137 0%, #1a3a52 50%, #2c5f7a 100%)"></div>
+      <div class="slide-content">
+        <span class="slide-tag">🚚 Free Delivery</span>
+        <h1>Free Delivery on Orders <span>Above ₹5,000</span></h1>
+        <p>Order online and get your construction materials delivered right to your site. Fast, reliable, and hassle-free delivery.</p>
+        <div class="hero-btns">
+          <a href="products.html" class="btn-primary">Order Now</a>
+          <a href="#contact" class="btn-outline">📞 Call Us</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Arrows -->
+  <button class="slider-arrow prev" onclick="slideMove(-1)" aria-label="Previous">‹</button>
+  <button class="slider-arrow next" onclick="slideMove(1)" aria-label="Next">›</button>
+
+  <!-- Dots -->
+  <div class="slider-controls" id="slider-dots"></div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-number">500+</span>
+    <div class="stat-label">Happy Customers</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">8</span>
+    <div class="stat-label">Product Types</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">10+</span>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number">24/7</span>
+    <div class="stat-label">Customer Support</div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section style="padding:2.5rem 0;background:var(--card-bg)">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div class="section-tag">Browse by Type</div>
+      <h2 style="font-size:1.8rem;font-weight:800;margin-top:0.4rem">Our Product Categories</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;max-width:900px;margin:0 auto">
+      <a href="products.html?category=blocks" class="feature-card" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.5rem">
+        <div style="font-size:2.5rem">🧱</div>
+        <div style="font-weight:700">Cement Blocks</div>
+        <div style="font-size:0.82rem;color:var(--text-muted)">6 inch, 8 inch, AAC</div>
+      </a>
+      <a href="products.html?category=bricks" class="feature-card" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.5rem">
+        <div style="font-size:2.5rem">🟫</div>
+        <div style="font-weight:700">Bricks</div>
+        <div style="font-size:0.82rem;color:var(--text-muted)">Red, Fly Ash, Sand Lime</div>
+      </a>
+      <a href="products.html?category=pavers" class="feature-card" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.5rem">
+        <div style="font-size:2.5rem">⬛</div>
+        <div style="font-weight:700">Paver Blocks</div>
+        <div style="font-size:0.82rem;color:var(--text-muted)">Driveways, Walkways</div>
+      </a>
+      <a href="products.html" class="feature-card" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1.5rem;border:2px dashed var(--border)">
+        <div style="font-size:2.5rem">🔲</div>
+        <div style="font-weight:700">All Products</div>
+        <div style="font-size:0.82rem;color:var(--text-muted)">Browse everything</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="section" id="products">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Top Picks</div>
+      <h2>Featured Products</h2>
+      <p>Our most popular construction materials, trusted by professionals and homeowners alike.</p>
+    </div>
+    <div class="products-grid" id="featured-products-grid">
+      <!-- Populated by JS -->
+    </div>
+    <div style="text-align:center;margin-top:2.5rem">
+      <a href="products.html" class="btn-primary">View All Products →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section" style="background:var(--card-bg)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Why BuildMate?</div>
+      <h2>Why Choose Us</h2>
+      <p>We deliver quality, reliability, and value on every order.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Premium Quality</h3>
+        <p>ISI certified products manufactured with strict quality control to meet BIS standards.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <h3>Fast Delivery</h3>
+        <p>Delivery within 3–7 working days. Free shipping on orders above ₹5,000.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>Best Prices</h3>
+        <p>Competitive pricing with bulk discount options for large construction projects.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📞</div>
+        <h3>24/7 Support</h3>
+        <p>Our expert team is always available to help you choose the right materials.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img">🏗️</div>
+      <div class="about-text">
+        <div class="section-tag">Our Story</div>
+        <h2>Building Trust Since 2014</h2>
+        <p>BuildMate was founded with a simple mission — to provide quality construction materials at fair prices, with exceptional service. We started as a small local supplier and have grown to serve thousands of customers across the region.</p>
+        <p>From residential homes to large commercial projects, our cement blocks and bricks have been the foundation of countless buildings. We take pride in the quality of our products and the relationships we've built with our customers.</p>
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="about-stat-num">10+</div>
+            <div class="about-stat-label">Years in Business</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">500+</div>
+            <div class="about-stat-label">Customers Served</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">8</div>
+            <div class="about-stat-label">Product Types</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact" style="background:var(--card-bg)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Get In Touch</div>
+      <h2>Contact Us</h2>
+      <p>Have questions or need a bulk quote? Reach out to us!</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-item-icon">📍</div>
+            <div class="contact-item-text">
+              <h4>Address</h4>
+              <p id="contact-address">123 Builder's Road, Industrial Area<br>Chennai, Tamil Nadu 600001</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">📞</div>
+            <div class="contact-item-text">
+              <h4>Phone</h4>
+              <p id="contact-phones">+91 98765 43210<br>+91 87654 32109</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">✉️</div>
+            <div class="contact-item-text">
+              <h4>Email</h4>
+              <p id="contact-emails">info@buildmate.in<br>orders@buildmate.in</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">🕐</div>
+            <div class="contact-item-text">
+              <h4>Business Hours</h4>
+              <p id="contact-hours">Mon–Sat: 8:00 AM – 6:00 PM<br>Sunday: 9:00 AM – 1:00 PM</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-wrap" style="margin-top:1.5rem">
+          <iframe id="contact-map"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248849.84916296526!2d80.09236!3d13.0471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1720000000000!5m2!1sen!2sin"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="BuildMate Location">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="contact-form-card">
+        <h3>📩 Send Us a Message</h3>
+        <form id="contact-form" onsubmit="submitContactForm(event)">
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Your Name</label>
+            <input type="text" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+91 XXXXX XXXXX">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Email Address</label>
+            <input type="email" placeholder="your@email.com">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Subject</label>
+            <select>
+              <option>Product Enquiry</option>
+              <option>Bulk Order Quote</option>
+              <option>Delivery Query</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Message</label>
+            <textarea placeholder="Tell us about your requirement..." rows="4"></textarea>
+          </div>
+          <button type="submit" class="btn-send">📤 Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-brand" style="margin-bottom:1rem">
+          <div class="brand-icon">🧱</div>
+          <div>
+            <div>BuildMate</div>
+            <div style="font-size:0.65rem;font-weight:400;opacity:0.6">Blocks & Bricks</div>
+          </div>
+        </div>
+        <p>Premium quality cement blocks and bricks for every construction need. Trusted by homeowners and contractors for over 10 years.</p>
+        <div class="social-links" style="margin-top:1rem">
+          <a href="#" class="social-link" title="Facebook">📘</a>
+          <a href="#" class="social-link" title="Instagram">📷</a>
+          <a href="#" class="social-link" title="WhatsApp">💬</a>
+          <a href="#" class="social-link" title="YouTube">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="track-order.html">Track Order</a></li>
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="products.html?category=blocks">Cement Blocks</a></li>
+          <li><a href="products.html?category=bricks">Fly Ash Bricks</a></li>
+          <li><a href="products.html?category=bricks">Red Bricks</a></li>
+          <li><a href="products.html?category=pavers">Paver Blocks</a></li>
+          <li><a href="products.html?category=pavers">Kerb Stones</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#">📞 <span id="footer-phone">+91 98765 43210</span></a></li>
+          <li><a href="#">✉️ <span id="footer-email">info@buildmate.in</span></a></li>
+          <li><a href="#">📍 Chennai, Tamil Nadu</a></li>
+          <li><a href="admin.html">🔐 Admin Login</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2024 BuildMate. All rights reserved.</div>
+      <div>Made with ❤️ for quality construction</div>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/919876543210?text=Hi%20BuildMate!%20I%20need%20more%20info%20about%20your%20products."
+   class="whatsapp-btn" target="_blank" title="Chat on WhatsApp">💬</a>
+
+<!-- Toast container -->
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/app.js"></script>
+<script>
+  // ── Hero Slider ────────────────────────────────────────────────────────────
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let autoSlideInterval;
+
+  function initSlider() {
+    const dotsContainer = document.getElementById('slider-dots');
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    }
+    startAutoSlide();
+  }
+
+  function goToSlide(index) {
+    currentSlide = (index + totalSlides) % totalSlides;
+    document.getElementById('main-slider').style.transform = `translateX(-${currentSlide * 100}%)`;
+    document.querySelectorAll('.slider-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === currentSlide);
+    });
+  }
+
+  function slideMove(direction) {
+    goToSlide(currentSlide + direction);
+    resetAutoSlide();
+  }
+
+  function startAutoSlide() {
+    autoSlideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
+  }
+
+  function resetAutoSlide() {
+    clearInterval(autoSlideInterval);
+    startAutoSlide();
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') slideMove(-1);
+    if (e.key === 'ArrowRight') slideMove(1);
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  const hero = document.querySelector('.hero');
+  hero.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  hero.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) slideMove(diff > 0 ? 1 : -1);
+  });
+
+  // ── Featured Products ───────────────────────────────────────────────────────
+  function renderFeaturedProducts() {
+    const featured = getProducts().filter(p => p.featured);
+    const grid = document.getElementById('featured-products-grid');
+    if (!grid) return;
+
+    grid.innerHTML = featured.map(product => {
+      const imgContent = product.image
+        ? `<img src="${product.image}" alt="${product.name}" loading="lazy">`
+        : `<div class="product-img-placeholder">${product.emoji || '🧱'}<span>${product.category}</span></div>`;
+
+      return `
+        <div class="product-card">
+          <div class="product-img-wrap" onclick="window.location='products.html'">
+            ${imgContent}
+            <span class="product-badge">In Stock</span>
+            <span class="product-category-badge" style="text-transform:capitalize">${product.category}</span>
+          </div>
+          <div class="product-info">
+            <div class="product-name">${product.name}</div>
+            <div class="product-desc">${product.description.substring(0, 75)}...</div>
+            <div class="product-meta">
+              <div class="product-price">${formatRupees(product.price)} <small>/ ${product.unit}</small></div>
+              <span class="product-stock stock-yes">✓ Available</span>
+            </div>
+            <div class="product-actions">
+              <button class="btn-add-cart" onclick="addToCart(${product.id}, 1)">🛒 Add to Cart</button>
+              <button class="btn-view" onclick="window.location='products.html'" title="View all">→</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function submitContactForm(e) {
+    e.preventDefault();
+    showToast('Message sent! We will get back to you soon.', 'success');
+    e.target.reset();
+  }
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initSlider();
+    renderFeaturedProducts();
+    applyContactSettings();
+  });
+</script>
+</body>
+</html>
