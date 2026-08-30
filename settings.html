@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — BuildMate Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text"><div>BuildMate</div><div class="logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="reports.html"><span class="nav-icon">📈</span> Reports</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="settings.html" class="active"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">⚙️ Store Settings</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem" id="settings-grid">
+
+        <!-- Contact Information -->
+        <div class="admin-table-card" style="padding:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+            📞 Contact Information
+          </h3>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Primary Phone <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="s-phone1" placeholder="+91 98765 43210">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Secondary Phone <span style="font-size:0.78rem;color:var(--text-muted)">(optional)</span></label>
+            <input type="text" id="s-phone2" placeholder="+91 87654 32109">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Primary Email <span style="color:var(--danger)">*</span></label>
+            <input type="email" id="s-email1" placeholder="info@buildmate.in">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Secondary Email <span style="font-size:0.78rem;color:var(--text-muted)">(optional)</span></label>
+            <input type="email" id="s-email2" placeholder="orders@buildmate.in">
+          </div>
+        </div>
+
+        <!-- Address & Hours -->
+        <div class="admin-table-card" style="padding:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+            📍 Address & Business Hours
+          </h3>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Street Address <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="s-address" placeholder="123 Builder's Road, Industrial Area">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>City / State / PIN <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="s-city" placeholder="Chennai, Tamil Nadu 600001">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Weekday Hours</label>
+            <input type="text" id="s-hours-weekday" placeholder="Mon–Sat: 8:00 AM – 6:00 PM">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Sunday Hours <span style="font-size:0.78rem;color:var(--text-muted)">(leave blank if closed)</span></label>
+            <input type="text" id="s-hours-sunday" placeholder="Sunday: 9:00 AM – 1:00 PM">
+          </div>
+        </div>
+
+        <!-- Store Identity -->
+        <div class="admin-table-card" style="padding:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+            🏪 Store Identity
+          </h3>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Store Name <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="s-store-name" placeholder="BuildMate">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Tagline</label>
+            <input type="text" id="s-tagline" placeholder="Quality Cement Blocks & Bricks">
+          </div>
+        </div>
+
+        <!-- WhatsApp & Map -->
+        <div class="admin-table-card" style="padding:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+            💬 WhatsApp & Map
+          </h3>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>WhatsApp Number <span style="font-size:0.78rem;color:var(--text-muted)">(digits only, with country code)</span></label>
+            <input type="text" id="s-whatsapp" placeholder="917684026529">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">
+              Example: for +91 98765 43210 enter <strong>919876543210</strong>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Google Maps Embed URL</label>
+            <textarea id="s-map-embed" rows="3"
+              placeholder="Paste the src URL from Google Maps → Share → Embed a map"></textarea>
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">
+              Go to Google Maps → Share → Embed a map → copy only the <code>src="..."</code> value
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /settings-grid -->
+
+      <!-- Delivery Charge -->
+      <div class="admin-table-card" style="padding:1.5rem;margin-top:1.5rem;max-width:480px">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+          🚚 Delivery Charge
+        </h3>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Delivery Charge (₹) <span style="color:var(--danger)">*</span></label>
+          <input type="number" id="s-delivery-charge" placeholder="299" min="0"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">Applied to orders that don't qualify for free delivery</div>
+        </div>
+        <div class="form-group">
+          <label>Free Delivery Above (₹) <span style="color:var(--danger)">*</span></label>
+          <input type="number" id="s-free-delivery-above" placeholder="5000" min="0"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">Orders above this amount get free delivery (set 0 to always charge)</div>
+        </div>
+      </div>
+
+      <!-- Change Password -->
+      <div class="admin-table-card" style="padding:1.5rem;margin-top:1.5rem;max-width:480px">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+          🔐 Change Admin Password
+        </h3>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Current Password <span style="color:var(--danger)">*</span></label>
+          <input type="password" id="cp-current" placeholder="Enter current password"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+        </div>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>New Password <span style="color:var(--danger)">*</span></label>
+          <input type="password" id="cp-new" placeholder="At least 6 characters"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+        </div>
+        <div class="form-group" style="margin-bottom:1.2rem">
+          <label>Confirm New Password <span style="color:var(--danger)">*</span></label>
+          <input type="password" id="cp-confirm" placeholder="Repeat new password"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+        </div>
+        <button onclick="changeAdminPassword()" class="btn-save" style="padding:0.75rem 1.8rem">
+          🔐 Update Password
+        </button>
+      </div>
+
+      <!-- Save / Reset buttons -->
+      <div style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap">
+        <button class="btn-save" style="padding:0.8rem 2rem;font-size:1rem" onclick="saveSettingsForm()">
+          💾 Save Settings
+        </button>
+        <button class="btn-cancel" onclick="resetToDefaults()"
+          style="padding:0.8rem 1.5rem;font-size:0.95rem">
+          ↺ Reset to Defaults
+        </button>
+        <a href="index.html#contact" target="_blank"
+          style="padding:0.8rem 1.5rem;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:0.4rem">
+          🌐 Preview on Store
+        </a>
+      </div>
+
+      <!-- Live preview -->
+      <div id="settings-preview" style="display:none;margin-top:2rem">
+        <div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:1rem">
+          Live Preview — Contact Section
+        </div>
+        <div class="admin-table-card" style="padding:1.5rem;max-width:500px">
+          <div class="contact-info">
+            <div class="contact-item" style="margin-bottom:0.8rem">
+              <div class="contact-item-icon">📍</div>
+              <div class="contact-item-text">
+                <h4 style="font-weight:700;margin-bottom:0.2rem">Address</h4>
+                <p id="prev-address" style="color:var(--text-light);font-size:0.9rem"></p>
+              </div>
+            </div>
+            <div class="contact-item" style="margin-bottom:0.8rem">
+              <div class="contact-item-icon">📞</div>
+              <div class="contact-item-text">
+                <h4 style="font-weight:700;margin-bottom:0.2rem">Phone</h4>
+                <p id="prev-phones" style="color:var(--text-light);font-size:0.9rem"></p>
+              </div>
+            </div>
+            <div class="contact-item" style="margin-bottom:0.8rem">
+              <div class="contact-item-icon">✉️</div>
+              <div class="contact-item-text">
+                <h4 style="font-weight:700;margin-bottom:0.2rem">Email</h4>
+                <p id="prev-emails" style="color:var(--text-light);font-size:0.9rem"></p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">🕐</div>
+              <div class="contact-item-text">
+                <h4 style="font-weight:700;margin-bottom:0.2rem">Business Hours</h4>
+                <p id="prev-hours" style="color:var(--text-light);font-size:0.9rem"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-main -->
+</div><!-- /admin-layout -->
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/app.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  function changeAdminPassword() {
+    const current = document.getElementById('cp-current').value;
+    const newPwd  = document.getElementById('cp-new').value.trim();
+    const confirm = document.getElementById('cp-confirm').value;
+
+    const creds = getAdminCredentials();
+    if (current !== creds.password) {
+      showToast('Current password is incorrect', 'error'); return;
+    }
+    if (newPwd.length < 6) {
+      showToast('New password must be at least 6 characters', 'warning'); return;
+    }
+    if (newPwd !== confirm) {
+      showToast('New passwords do not match', 'error'); return;
+    }
+
+    Store.set('bm_admin_creds', { username: creds.username, password: newPwd });
+    document.getElementById('cp-current').value = '';
+    document.getElementById('cp-new').value     = '';
+    document.getElementById('cp-confirm').value = '';
+    showToast('Password updated successfully!', 'success');
+  }
+
+  function loadSettingsIntoForm() {
+    const s = getSettings();
+    document.getElementById('s-phone1').value        = s.phone1;
+    document.getElementById('s-phone2').value        = s.phone2;
+    document.getElementById('s-email1').value        = s.email1;
+    document.getElementById('s-email2').value        = s.email2;
+    document.getElementById('s-address').value       = s.address;
+    document.getElementById('s-city').value          = s.city;
+    document.getElementById('s-hours-weekday').value = s.hoursWeekday;
+    document.getElementById('s-hours-sunday').value  = s.hoursSunday;
+    document.getElementById('s-store-name').value    = s.storeName;
+    document.getElementById('s-tagline').value       = s.tagline;
+    document.getElementById('s-whatsapp').value      = s.whatsapp;
+    document.getElementById('s-map-embed').value     = s.mapEmbed;
+    document.getElementById('s-delivery-charge').value      = s.deliveryCharge;
+    document.getElementById('s-free-delivery-above').value  = s.freeDeliveryAbove;
+  }
+
+  function saveSettingsForm() {
+    const phone1 = document.getElementById('s-phone1').value.trim();
+    const email1 = document.getElementById('s-email1').value.trim();
+    const address = document.getElementById('s-address').value.trim();
+    const city    = document.getElementById('s-city').value.trim();
+    const storeName = document.getElementById('s-store-name').value.trim();
+
+    if (!phone1 || !email1 || !address || !city || !storeName) {
+      showToast('Please fill all required fields', 'error');
+      return;
+    }
+
+    const settings = {
+      storeName,
+      tagline:      document.getElementById('s-tagline').value.trim(),
+      phone1,
+      phone2:       document.getElementById('s-phone2').value.trim(),
+      email1,
+      email2:       document.getElementById('s-email2').value.trim(),
+      address,
+      city,
+      hoursWeekday: document.getElementById('s-hours-weekday').value.trim(),
+      hoursSunday:  document.getElementById('s-hours-sunday').value.trim(),
+      whatsapp:     document.getElementById('s-whatsapp').value.trim().replace(/\D/g, ''),
+      mapEmbed:     document.getElementById('s-map-embed').value.trim(),
+      deliveryCharge:    parseFloat(document.getElementById('s-delivery-charge').value) || 299,
+      freeDeliveryAbove: parseFloat(document.getElementById('s-free-delivery-above').value) || 5000
+    };
+
+    saveSettings(settings);
+    showToast('Settings saved! Changes are now live on the store.', 'success');
+    updatePreview(settings);
+  }
+
+  function resetToDefaults() {
+    if (!confirmAction('Reset all settings to default values?')) return;
+    Store.remove('bm_settings');
+    loadSettingsIntoForm();
+    showToast('Settings reset to defaults', 'info');
+    updatePreview(getSettings());
+  }
+
+  function updatePreview(s) {
+    document.getElementById('settings-preview').style.display = 'block';
+    document.getElementById('prev-address').innerHTML =
+      `${s.address}<br>${s.city}`;
+    document.getElementById('prev-phones').innerHTML =
+      `${s.phone1}${s.phone2 ? '<br>' + s.phone2 : ''}`;
+    document.getElementById('prev-emails').innerHTML =
+      `${s.email1}${s.email2 ? '<br>' + s.email2 : ''}`;
+    document.getElementById('prev-hours').innerHTML =
+      `${s.hoursWeekday}${s.hoursSunday ? '<br>' + s.hoursSunday : ''}`;
+  }
+
+  // Live preview on any input change
+  document.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input', () => {
+      const s = {
+        storeName:    document.getElementById('s-store-name').value,
+        phone1:       document.getElementById('s-phone1').value,
+        phone2:       document.getElementById('s-phone2').value,
+        email1:       document.getElementById('s-email1').value,
+        email2:       document.getElementById('s-email2').value,
+        address:      document.getElementById('s-address').value,
+        city:         document.getElementById('s-city').value,
+        hoursWeekday: document.getElementById('s-hours-weekday').value,
+        hoursSunday:  document.getElementById('s-hours-sunday').value,
+      };
+      updatePreview(s);
+    });
+  });
+
+  // Responsive grid
+  function adjustGrid() {
+    document.getElementById('settings-grid').style.gridTemplateColumns =
+      window.innerWidth < 900 ? '1fr' : '1fr 1fr';
+  }
+  window.addEventListener('resize', adjustGrid);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadSettingsIntoForm();
+    updatePreview(getSettings());
+    adjustGrid();
+  });
+</script>
+</body>
+</html>

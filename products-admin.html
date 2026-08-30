@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products — BuildMate Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text">
+        <div>BuildMate</div>
+        <div class="logo-sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="products-admin.html" class="active"><span class="nav-icon">🧱</span> Products</a>
+        <a href="customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="reports.html"><span class="nav-icon">📈</span> Reports</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">🧱 Product Management</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="admin-table-card">
+        <div class="admin-table-header">
+          <h3>All Products</h3>
+          <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap">
+            <div class="admin-search">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="admin-search-input" placeholder="Search products...">
+            </div>
+            <button class="btn-primary" style="padding:0.55rem 1.2rem;border-radius:8px;font-size:0.88rem" onclick="openAddProduct()">
+              + Add Product
+            </button>
+          </div>
+        </div>
+        <div id="admin-products-table" style="overflow-x:auto">
+          <!-- Populated by admin.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT PRODUCT MODAL -->
+<div class="admin-modal-overlay" id="product-modal-overlay">
+  <div class="admin-modal">
+    <div class="admin-modal-header">
+      <h3 id="product-form-title">Add New Product</h3>
+      <button class="modal-close" onclick="closeProductForm()">✕</button>
+    </div>
+    <div class="admin-modal-body">
+      <form id="product-form" onsubmit="return false">
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Product Name <span style="color:var(--danger)">*</span></label>
+          <input type="text" id="pf-name" placeholder="e.g. Cement Block 6 inch">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div class="form-group">
+            <label>Category <span style="color:var(--danger)">*</span></label>
+            <select id="pf-category">
+              <option value="">Select category</option>
+              <option value="blocks">Cement Blocks</option>
+              <option value="bricks">Bricks</option>
+              <option value="pavers">Pavers</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Unit</label>
+            <input type="text" id="pf-unit" placeholder="Piece" value="Piece">
+          </div>
+          <div class="form-group">
+            <label>Price (₹) <span style="color:var(--danger)">*</span></label>
+            <input type="number" id="pf-price" placeholder="0" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Stock (units) <span style="color:var(--danger)">*</span></label>
+            <input type="number" id="pf-stock" placeholder="0" min="0" oninput="toggleOosReason(this.value)">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Description <span style="color:var(--danger)">*</span></label>
+          <textarea id="pf-desc" placeholder="Product description..." rows="3"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div class="form-group">
+            <label>Dimensions</label>
+            <input type="text" id="pf-dimensions" placeholder="e.g. 400 × 200 × 150 mm">
+          </div>
+          <div class="form-group">
+            <label>Weight</label>
+            <input type="text" id="pf-weight" placeholder="e.g. 12 kg">
+          </div>
+          <div class="form-group">
+            <label>Emoji Icon</label>
+            <input type="text" id="pf-emoji" placeholder="🧱" maxlength="4">
+          </div>
+        </div>
+        <div class="form-group" id="out-of-stock-reason-group" style="margin-bottom:1rem;display:none">
+          <label>Out-of-Stock Reason <span style="font-size:0.78rem;color:var(--text-muted)">(shown to customers)</span></label>
+          <input type="text" id="pf-oos-reason" placeholder="e.g. Restocking in progress, expected by July 20">
+        </div>
+      </form>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-cancel" onclick="closeProductForm()">Cancel</button>
+      <button class="btn-save" onclick="saveProduct()">💾 Save Product</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/app.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  function toggleOosReason(val) {
+    const group = document.getElementById('out-of-stock-reason-group');
+    group.style.display = parseInt(val) === 0 ? 'block' : 'none';
+    if (parseInt(val) !== 0) document.getElementById('pf-oos-reason').value = '';
+  }
+</script>
+</body>
+</html>
