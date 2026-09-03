@@ -1012,7 +1012,7 @@ window.toggleAdminSidebar = function () {
 document.addEventListener('DOMContentLoaded', async () => {
   const page = window.location.pathname.split('/').pop();
 
-  if (page === 'admin.html') {
+  if (page === 'admin.html' || page === 'admin' || page === '') {
     initLoginPage();
     return;
   }
