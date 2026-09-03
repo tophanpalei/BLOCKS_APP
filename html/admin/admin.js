@@ -1010,9 +1010,9 @@ window.toggleAdminSidebar = function () {
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
-  const page = window.location.pathname.split('/').pop();
+  const page = window.location.pathname.split('/').pop().replace(/\.html$/, '');
 
-  if (page === 'admin.html') {
+  if (page === 'admin' || page === '') {
     initLoginPage();
     return;
   }
@@ -1028,7 +1028,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // New order badge
   const _orderCount = getOrders().length;
-  if (page === 'orders.html') {
+  if (page === 'orders') {
     Store.set('bm_last_seen_orders', _orderCount);
   } else {
     const _lastSeen = parseInt(Store.get('bm_last_seen_orders', _orderCount) || _orderCount);
@@ -1051,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       const val = e.target.value.trim();
-      if (page === 'products.html' || document.getElementById('admin-products-table')) renderAdminProducts(val);
+      if (page === 'products' || document.getElementById('admin-products-table')) renderAdminProducts(val);
       else if (document.getElementById('customers-table')) renderCustomers(val);
     });
   }
