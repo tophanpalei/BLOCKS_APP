@@ -10,7 +10,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 // ⚠️  Set this to the same value as SHEETS_SECRET in js/config.js
-const WRITE_SECRET = 'CHANGE_THIS_TO_A_STRONG_SECRET';
+const WRITE_SECRET = 'BuildMate@2024!';
 
 // Keys whose value is an array — each gets its own Sheet tab
 const ARRAY_KEYS = new Set([
