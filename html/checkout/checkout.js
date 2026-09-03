@@ -349,7 +349,7 @@
 
       // Store latest order ID for success page
       Store.set('bm_last_order', order);
-      window.location.href = 'order-success.html?id=' + encodeURIComponent(order.id);
+      window.location.href = '../order-success/order-success.html?id=' + encodeURIComponent(order.id);
     }, 1500);
   }
 
