@@ -439,3 +439,5 @@
   }
 
   document.addEventListener('DOMContentLoaded', renderCheckoutSummary);
+  // Re-render after Sheets sync so settings (labour charge, delivery rate) reach customer phones
+  window.addEventListener('bm:synced', renderCheckoutSummary);
