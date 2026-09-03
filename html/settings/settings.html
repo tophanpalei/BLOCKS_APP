@@ -260,6 +260,16 @@
         </button>
       </div>
 
+      <!-- Cloud Sync -->
+      <div style="background:linear-gradient(135deg,rgba(39,174,96,0.08),rgba(39,174,96,0.03));border:1.5px solid rgba(39,174,96,0.3);border-radius:var(--radius);padding:1.2rem 1.5rem;margin-top:1.5rem">
+        <div style="font-size:0.95rem;font-weight:700;margin-bottom:0.4rem">☁️ Push All Data to Google Sheets</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem">Run this once from your desktop to upload all data (settings, products, employees, orders) so mobile devices can sync.</div>
+        <button onclick="pushAllToCloud()" id="sync-all-btn" style="padding:0.7rem 1.5rem;background:var(--success);color:white;border:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:0.9rem;font-weight:700;cursor:pointer">
+          ☁️ Push All to Cloud Now
+        </button>
+        <span id="sync-all-status" style="margin-left:1rem;font-size:0.85rem;color:var(--text-muted)"></span>
+      </div>
+
       <!-- Save / Reset buttons -->
       <div style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap">
         <button class="btn-save" style="padding:0.8rem 2rem;font-size:1rem" onclick="saveSettingsForm()">

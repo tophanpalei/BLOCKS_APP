@@ -178,6 +178,47 @@
   }
   window.addEventListener('resize', adjustGrid);
 
+  window.pushAllToCloud = async function () {
+    if (!SHEETS_URL) {
+      alert('Google Sheets is not configured. Add SHEETS_URL in Netlify environment variables.');
+      return;
+    }
+    const btn = document.getElementById('sync-all-btn');
+    const status = document.getElementById('sync-all-status');
+    btn.disabled = true;
+    btn.textContent = '⏳ Uploading...';
+    status.textContent = '';
+
+    const keys = [
+      'bm_settings', 'bm_admin_creds', 'bm_products', 'bm_employees',
+      'bm_orders', 'bm_attendance', 'bm_expenses', 'bm_departments',
+      'bm_shifts', 'bm_shift_history', 'bm_leaves', 'bm_holidays',
+      'bm_weekly_off', 'bm_overtime', 'bm_advances', 'bm_payroll_runs'
+    ];
+
+    let pushed = 0, skipped = 0;
+    for (const key of keys) {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        try {
+          const value = JSON.parse(raw);
+          await fetch(SHEETS_URL, {
+            method: 'POST',
+            body: JSON.stringify({ key, value, secret: SHEETS_SECRET })
+          });
+          pushed++;
+        } catch (_) { skipped++; }
+      } else {
+        skipped++;
+      }
+    }
+
+    btn.disabled = false;
+    btn.textContent = '☁️ Push All to Cloud Now';
+    status.textContent = `✅ Done! ${pushed} items uploaded, ${skipped} empty.`;
+    showToast('All data pushed to Google Sheets!', 'success');
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
     loadSettingsIntoForm();
     updatePreview(getSettings());

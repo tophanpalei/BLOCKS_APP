@@ -159,4 +159,5 @@
   };
 
   document.addEventListener('DOMContentLoaded', renderCart);
+  window.addEventListener('bm:synced', renderCart);
 })();

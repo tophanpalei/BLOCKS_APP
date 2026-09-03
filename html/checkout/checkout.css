@@ -1,0 +1,80 @@
+/* ── Checkout Mobile Styles ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  .checkout-page { padding: 1rem 0 3rem; }
+
+  /* Stack form + summary into single column */
+  .checkout-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  /* Form cards full width */
+  .checkout-form-card,
+  .checkout-summary-card {
+    padding: 1.1rem !important;
+  }
+
+  /* Form grid: single column on mobile */
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .form-group.full { grid-column: auto !important; }
+
+  /* Inputs: 16px prevents iOS zoom */
+  .checkout-form-card input,
+  .checkout-form-card textarea,
+  .checkout-form-card select {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+
+  /* GPS + Map buttons — full width stack on very small screens */
+  #checkout-form > div:first-child > div:first-child {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Geocode button — ensure it's fully visible */
+  #geocode-row {
+    margin-top: 0.75rem;
+  }
+  #geocode-btn {
+    min-height: 48px !important;
+    font-size: 0.9rem !important;
+    white-space: normal !important;
+    line-height: 1.3 !important;
+    padding: 0.75rem !important;
+  }
+
+  /* Labour row in summary */
+  #co-labour-row {
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+  #co-labour-row label {
+    font-size: 0.88rem !important;
+  }
+
+  /* Summary rows */
+  .summary-row {
+    font-size: 0.9rem;
+  }
+  .summary-row.total {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  /* Payment options */
+  .payment-options { gap: 0.6rem !important; }
+  .payment-option  { padding: 0.75rem !important; }
+
+  /* Place order button */
+  .btn-place-order {
+    min-height: 52px !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #geocode-btn { font-size: 0.82rem !important; }
+}

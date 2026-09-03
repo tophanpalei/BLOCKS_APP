@@ -512,6 +512,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initNavbar();
   applyContactSettings();
+  // Sync settings/products/etc from Sheets so all devices (including customer phones) get fresh data
+  syncFromSheets().then(() => {
+    applyContactSettings();
+    window.dispatchEvent(new CustomEvent('bm:synced'));
+  }).catch(() => {});
 });
 
 // ── Employees ──────────────────────────────────────────────────────────────
