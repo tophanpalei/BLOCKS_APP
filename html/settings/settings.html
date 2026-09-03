@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./settings.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text"><div>BuildMate</div><div class="logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html" class="active"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">⚙️ Store Settings</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem" id="settings-grid">
+
+        <!-- Contact Information -->
+        <div class="admin-table-card" style="padding:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+            📞 Contact Information
+          </h3>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Primary Phone <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="s-phone1" placeholder="+91 98765 43210">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Secondary Phone <span style="font-size:0.78rem;color:var(--text-muted)">(optional)</span></label>
+            <input type="text" id="s-phone2" placeholder="+91 87654 32109">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Primary Email <span style="color:var(--danger)">*</span></label>
+            <input type="email" id="s-email1" placeholder="info@buildmate.in">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Secondary Email <span style="font-size:0.78rem;color:var(--text-muted)">(optional)</span></label>
+            <input type="email" id="s-email2" placeholder="orders@buildmate.in">
+          </div>
+        </div>
+
+        <!-- Address & Hours -->
+        <div class="admin-table-card" style="padding:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+            📍 Address & Business Hours
+          </h3>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Street Address <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="s-address" placeholder="123 Builder's Road, Industrial Area">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>City / State / PIN <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="s-city" placeholder="Chennai, Tamil Nadu 600001">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Weekday Hours</label>
+            <input type="text" id="s-hours-weekday" placeholder="Mon–Sat: 8:00 AM – 6:00 PM">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Sunday Hours <span style="font-size:0.78rem;color:var(--text-muted)">(leave blank if closed)</span></label>
+            <input type="text" id="s-hours-sunday" placeholder="Sunday: 9:00 AM – 1:00 PM">
+          </div>
+        </div>
+
+        <!-- Store Identity -->
+        <div class="admin-table-card" style="padding:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+            🏪 Store Identity
+          </h3>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Store Name <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="s-store-name" placeholder="BuildMate">
+          </div>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Tagline</label>
+            <input type="text" id="s-tagline" placeholder="Quality Cement Blocks & Bricks">
+          </div>
+          <!-- Store Logo -->
+          <div class="form-group" style="margin-bottom:0">
+            <label>Store Logo <span style="font-size:0.78rem;color:var(--text-muted)">(from local file)</span></label>
+            <div style="display:flex;align-items:center;gap:1rem;margin-top:0.5rem">
+              <div id="logo-preview"
+                style="width:64px;height:64px;border:2px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:var(--bg);overflow:hidden;flex-shrink:0">
+                <span id="logo-emoji-ph">🧱</span>
+                <img id="logo-img-thumb" src="" alt="" style="display:none;width:100%;height:100%;object-fit:contain;border-radius:8px;padding:4px">
+              </div>
+              <div>
+                <input type="file" id="logo-file-input" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
+                <button type="button" onclick="document.getElementById('logo-file-input').click()"
+                  style="padding:0.5rem 1rem;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:0.85rem;background:var(--card-bg);color:var(--text);font-family:var(--font)">
+                  📁 Choose Logo
+                </button>
+                <button type="button" id="logo-remove-btn" onclick="clearLogo()"
+                  style="display:none;margin-left:0.5rem;padding:0.5rem 0.8rem;border:1.5px solid var(--danger);border-radius:8px;cursor:pointer;font-size:0.85rem;background:none;color:var(--danger);font-family:var(--font)">
+                  ✕ Remove
+                </button>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.4rem">PNG/SVG recommended · Max 1 MB</div>
+              </div>
+            </div>
+            <input type="hidden" id="s-logo-data" value="">
+          </div>
+        </div>
+
+        <!-- WhatsApp & Map -->
+        <div class="admin-table-card" style="padding:1.5rem">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+            💬 WhatsApp & Map
+          </h3>
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>WhatsApp Number <span style="font-size:0.78rem;color:var(--text-muted)">(digits only, with country code)</span></label>
+            <input type="text" id="s-whatsapp" placeholder="917684026529">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">
+              Example: for +91 98765 43210 enter <strong>919876543210</strong>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label>Google Maps Embed URL</label>
+            <textarea id="s-map-embed" rows="3"
+              placeholder="Paste the src URL from Google Maps → Share → Embed a map"></textarea>
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">
+              Go to Google Maps → Share → Embed a map → copy only the <code>src="..."</code> value
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /settings-grid -->
+
+      <!-- Delivery Charge -->
+      <div class="admin-table-card" style="padding:1.5rem;margin-top:1.5rem;max-width:480px">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+          🚚 Delivery Charge
+        </h3>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Delivery Charge (₹) <span style="color:var(--danger)">*</span></label>
+          <input type="number" id="s-delivery-charge" placeholder="299" min="0"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">Applied to orders that don't qualify for free delivery</div>
+        </div>
+        <div class="form-group">
+          <label>Free Delivery Above (₹) <span style="color:var(--danger)">*</span></label>
+          <input type="number" id="s-free-delivery-above" placeholder="5000" min="0"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">Orders above this amount get free delivery (set 0 to always charge)</div>
+        </div>
+        <div class="form-group" style="margin-top:1rem">
+          <label>Labour Charge (₹) <span style="font-size:0.78rem;color:var(--text-muted);font-weight:400">— Loading / Unloading</span></label>
+          <input type="number" id="s-labour-charge" placeholder="0" min="0"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.3rem">Shown as optional add-on at checkout (set 0 to hide)</div>
+        </div>
+      </div>
+
+      <!-- Distance-Based Pricing -->
+      <div class="admin-table-card" style="padding:1.5rem;margin-top:1.5rem;max-width:480px">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.5rem">
+          📍 Distance-Based Pricing
+        </h3>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:1.2rem">Set rates for auto-calculated charges when customer uses "Use My Location" at checkout. Set 0 to disable.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div class="form-group">
+            <label>Company Latitude</label>
+            <input type="number" id="s-company-lat" placeholder="e.g. 13.0471" step="any"
+              style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+          </div>
+          <div class="form-group">
+            <label>Company Longitude</label>
+            <input type="number" id="s-company-lng" placeholder="e.g. 80.0928" step="any"
+              style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+          </div>
+        </div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:1rem;background:var(--bg);padding:0.6rem 0.8rem;border-radius:6px">
+          💡 To find your coordinates: open <strong>Google Maps</strong>, right-click your location → copy the numbers shown (e.g. 13.0471, 80.0928)
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group">
+            <label>Delivery per km (₹)</label>
+            <input type="number" id="s-delivery-per-km" placeholder="e.g. 10" min="0" step="0.5"
+              style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.3rem">Delivery = distance × this rate</div>
+          </div>
+          <div class="form-group">
+            <label>Labour per item (₹)</label>
+            <input type="number" id="s-labour-per-item" placeholder="e.g. 5" min="0" step="0.5"
+              style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.3rem">Labour = total items × this rate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Change Password -->
+      <div class="admin-table-card" style="padding:1.5rem;margin-top:1.5rem;max-width:480px">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem">
+          🔐 Change Admin Password
+        </h3>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>Current Password <span style="color:var(--danger)">*</span></label>
+          <input type="password" id="cp-current" placeholder="Enter current password"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+        </div>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label>New Password <span style="color:var(--danger)">*</span></label>
+          <input type="password" id="cp-new" placeholder="At least 6 characters"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+        </div>
+        <div class="form-group" style="margin-bottom:1.2rem">
+          <label>Confirm New Password <span style="color:var(--danger)">*</span></label>
+          <input type="password" id="cp-confirm" placeholder="Repeat new password"
+            style="padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.95rem;width:100%;font-family:var(--font);margin-top:0.4rem;box-sizing:border-box">
+        </div>
+        <button onclick="changeAdminPassword()" class="btn-save" style="padding:0.75rem 1.8rem">
+          🔐 Update Password
+        </button>
+      </div>
+
+      <!-- Save / Reset buttons -->
+      <div style="display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap">
+        <button class="btn-save" style="padding:0.8rem 2rem;font-size:1rem" onclick="saveSettingsForm()">
+          💾 Save Settings
+        </button>
+        <button class="btn-cancel" onclick="resetToDefaults()"
+          style="padding:0.8rem 1.5rem;font-size:0.95rem">
+          ↺ Reset to Defaults
+        </button>
+        <a href="index.html#contact" target="_blank"
+          style="padding:0.8rem 1.5rem;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:0.4rem">
+          🌐 Preview on Store
+        </a>
+      </div>
+
+      <!-- Live preview -->
+      <div id="settings-preview" style="display:none;margin-top:2rem">
+        <div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:1rem">
+          Live Preview — Contact Section
+        </div>
+        <div class="admin-table-card" style="padding:1.5rem;max-width:500px">
+          <div class="contact-info">
+            <div class="contact-item" style="margin-bottom:0.8rem">
+              <div class="contact-item-icon">📍</div>
+              <div class="contact-item-text">
+                <h4 style="font-weight:700;margin-bottom:0.2rem">Address</h4>
+                <p id="prev-address" style="color:var(--text-light);font-size:0.9rem"></p>
+              </div>
+            </div>
+            <div class="contact-item" style="margin-bottom:0.8rem">
+              <div class="contact-item-icon">📞</div>
+              <div class="contact-item-text">
+                <h4 style="font-weight:700;margin-bottom:0.2rem">Phone</h4>
+                <p id="prev-phones" style="color:var(--text-light);font-size:0.9rem"></p>
+              </div>
+            </div>
+            <div class="contact-item" style="margin-bottom:0.8rem">
+              <div class="contact-item-icon">✉️</div>
+              <div class="contact-item-text">
+                <h4 style="font-weight:700;margin-bottom:0.2rem">Email</h4>
+                <p id="prev-emails" style="color:var(--text-light);font-size:0.9rem"></p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">🕐</div>
+              <div class="contact-item-text">
+                <h4 style="font-weight:700;margin-bottom:0.2rem">Business Hours</h4>
+                <p id="prev-hours" style="color:var(--text-light);font-size:0.9rem"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-main -->
+</div><!-- /admin-layout -->
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./settings.js"></script>
+</body>
+</html>

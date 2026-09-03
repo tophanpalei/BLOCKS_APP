@@ -1668,6 +1668,11 @@ button { cursor: pointer; border: none; font-family: var(--font); }
 
 .admin-nav a .nav-icon { width: 18px; text-align: center; font-size: 0.95rem; }
 
+/* Employee sub-nav */
+.sub-nav { margin: 0.1rem 0 0.3rem 1rem; border-left: 2px solid rgba(255,255,255,0.15); padding-left: 0.6rem; }
+.sub-nav a { font-size: 0.82rem !important; padding: 0.32rem 0.7rem !important; opacity: 0.88; }
+.sub-nav a:hover, .sub-nav a.active { opacity: 1; }
+
 .admin-sidebar-footer {
   padding: 1rem 0.8rem;
   border-top: 1px solid rgba(255,255,255,0.1);

@@ -117,9 +117,11 @@ const DEFAULT_PRODUCTS = [
 ];
 
 // ── Google Sheets Integration ───────────────────────────────────────────────
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyafj8RMVuUJXspfuUEK2ClxVtKYhZRQf45jwZLww8XENu1i1Wwm6csWANpTJCFWFU8/exec'; // Paste your Apps Script deployment URL here
+// Credentials come from js/config.js (gitignored). Fallback to '' if missing.
+const SHEETS_URL    = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.SHEETS_URL)    ? APP_CONFIG.SHEETS_URL    : '';
+const SHEETS_SECRET = (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.SHEETS_SECRET) ? APP_CONFIG.SHEETS_SECRET : '';
 
-const _LOCAL_ONLY = new Set(['bm_admin_session', 'bm_cart', 'bm_last_order', 'bm_last_seen_orders', 'bm_theme']);
+const _LOCAL_ONLY = new Set(['bm_admin_session', 'bm_cart', 'bm_last_order', 'bm_last_seen_orders', 'bm_theme', 'bm_employee_session']);
 
 const Store = {
   get(key, fallback = null) {
@@ -134,7 +136,7 @@ const Store = {
       fetch(SHEETS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ key, value })
+        body: JSON.stringify({ key, value, secret: SHEETS_SECRET })
       }).catch(() => {});
     }
   },
@@ -144,7 +146,7 @@ const Store = {
       fetch(SHEETS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ key, value: null })
+        body: JSON.stringify({ key, value: null, secret: SHEETS_SECRET })
       }).catch(() => {});
     }
   }
@@ -152,10 +154,10 @@ const Store = {
 
 async function syncFromSheets() {
   if (!SHEETS_URL) return;
-  const keys = ['bm_orders', 'bm_products', 'bm_settings', 'bm_admin_creds'];
+  const keys = ['bm_orders', 'bm_products', 'bm_settings', 'bm_admin_creds', 'bm_employees', 'bm_attendance', 'bm_expenses', 'bm_departments', 'bm_shifts', 'bm_shift_history', 'bm_leaves', 'bm_holidays', 'bm_weekly_off', 'bm_overtime', 'bm_advances', 'bm_payroll_runs'];
   try {
     await Promise.all(keys.map(async key => {
-      const res  = await fetch(`${SHEETS_URL}?key=${encodeURIComponent(key)}`);
+      const res  = await fetch(`${SHEETS_URL}?key=${encodeURIComponent(key)}&secret=${encodeURIComponent(SHEETS_SECRET)}`);
       const json = await res.json();
       if (json.data !== null && json.data !== undefined) {
         localStorage.setItem(key, JSON.stringify(json.data));
@@ -295,6 +297,7 @@ function createOrder(customerInfo, cartItems) {
   const subtotal = items.reduce((s, i) => s + i.total, 0);
   const _s = getSettings();
   const delivery = subtotal >= (_s.freeDeliveryAbove || 5000) ? 0 : (_s.deliveryCharge || 299);
+  const labour = customerInfo.labour || 0;
 
   const order = {
     id: generateOrderId(),
@@ -303,7 +306,8 @@ function createOrder(customerInfo, cartItems) {
     items,
     subtotal,
     delivery,
-    total: subtotal + delivery,
+    labour,
+    total: subtotal + delivery + labour,
     status: 'Pending',
     paymentMethod: customerInfo.paymentMethod
   };
@@ -436,6 +440,7 @@ function confirmAction(message) {
 const DEFAULT_SETTINGS = {
   storeName:    'BuildMate',
   tagline:      'Quality Cement Blocks & Bricks',
+  logo:         null,
   phone1:       '+91 98765 43210',
   phone2:       '+91 87654 32109',
   email1:       'info@buildmate.in',
@@ -447,7 +452,12 @@ const DEFAULT_SETTINGS = {
   whatsapp:     '917684026529',
   mapEmbed:     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248849.84916296526!2d80.09236!3d13.0471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5265ea4f7d3361%3A0x6e61a70b6863d433!2sChennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1720000000000!5m2!1sen!2sin',
   deliveryCharge:    299,
-  freeDeliveryAbove: 5000
+  freeDeliveryAbove: 5000,
+  labourCharge:      0,
+  deliveryPerKm:     0,
+  labourPerItem:     0,
+  companyLat:        0,
+  companyLng:        0
 };
 
 function getSettings() {
@@ -472,6 +482,14 @@ function applyContactSettings() {
     if (el) el.textContent = val;
   };
 
+  // Logo
+  if (s.logo) {
+    document.querySelectorAll('.brand-icon').forEach(el => {
+      el.innerHTML = `<img src="${s.logo}" alt="${s.storeName}" style="width:100%;height:100%;object-fit:contain;border-radius:4px">`;
+      el.style.fontSize = '0';
+    });
+  }
+
   set('contact-address',   `${s.address}<br>${s.city}`);
   set('contact-phones',    `${s.phone1}${s.phone2 ? '<br>' + s.phone2 : ''}`);
   set('contact-emails',    `${s.email1}${s.email2 ? '<br>' + s.email2 : ''}`);
@@ -495,3 +513,388 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   applyContactSettings();
 });
+
+// ── Employees ──────────────────────────────────────────────────────────────
+function getEmployees() {
+  return Store.get('bm_employees', []);
+}
+
+function saveEmployees(employees) {
+  Store.set('bm_employees', employees);
+}
+
+// ── Departments ────────────────────────────────────────────────────────────
+const DEFAULT_DEPARTMENTS = [
+  'Production','Quality','Warehouse','Maintenance','Logistics',
+  'Sales','Accounts','HR/Admin','Security','Management'
+];
+
+function getDepartments() {
+  const stored = Store.get('bm_departments', null);
+  if (stored) return stored;
+  // Seed defaults on first use
+  const defaults = DEFAULT_DEPARTMENTS.map((name, i) => ({
+    id: 'DEPT' + String(i + 1).padStart(3, '0'),
+    name,
+    active: true
+  }));
+  Store.set('bm_departments', defaults);
+  return defaults;
+}
+
+function saveDepartments(depts) {
+  Store.set('bm_departments', depts);
+}
+
+function generateDeptId() {
+  const depts = getDepartments();
+  if (!depts.length) return 'DEPT001';
+  const nums = depts.map(d => parseInt((d.id || '').replace(/\D/g, '')) || 0);
+  return 'DEPT' + String(Math.max(...nums) + 1).padStart(3, '0');
+}
+
+// ── Shifts ─────────────────────────────────────────────────────────────────
+const DEFAULT_SHIFTS = [
+  { id:'SHIFT001', name:'General Shift',  startTime:'09:00', endTime:'18:00', breakMinutes:60, gracePeriodMinutes:15, overtimeThresholdMinutes:30, weeklyOffType:'fixed', fixedDays:['Sunday'],    rotationalNote:'', active:true },
+  { id:'SHIFT002', name:'Morning Shift',  startTime:'06:00', endTime:'14:00', breakMinutes:30, gracePeriodMinutes:10, overtimeThresholdMinutes:30, weeklyOffType:'fixed', fixedDays:['Sunday'],    rotationalNote:'', active:true },
+  { id:'SHIFT003', name:'Evening Shift',  startTime:'14:00', endTime:'22:00', breakMinutes:30, gracePeriodMinutes:10, overtimeThresholdMinutes:30, weeklyOffType:'fixed', fixedDays:['Sunday'],    rotationalNote:'', active:true },
+  { id:'SHIFT004', name:'Night Shift',    startTime:'22:00', endTime:'06:00', breakMinutes:30, gracePeriodMinutes:10, overtimeThresholdMinutes:30, weeklyOffType:'fixed', fixedDays:['Sunday'],    rotationalNote:'', active:true },
+];
+
+function getShifts() {
+  const stored = Store.get('bm_shifts', null);
+  if (stored) return stored;
+  Store.set('bm_shifts', DEFAULT_SHIFTS);
+  return DEFAULT_SHIFTS;
+}
+
+function saveShifts(shifts) {
+  Store.set('bm_shifts', shifts);
+}
+
+function generateShiftId() {
+  const shifts = getShifts();
+  if (!shifts.length) return 'SHIFT001';
+  const nums = shifts.map(s => parseInt((s.id || '').replace(/\D/g, '')) || 0);
+  return 'SHIFT' + String(Math.max(...nums) + 1).padStart(3, '0');
+}
+
+function getShiftHistory() {
+  return Store.get('bm_shift_history', []);
+}
+
+function saveShiftHistory(history) {
+  Store.set('bm_shift_history', history);
+}
+
+function logShiftChange(emp, oldShiftName, newShiftName, effectiveFrom, reason) {
+  const history = getShiftHistory();
+  history.unshift({
+    id:           'SCH' + Date.now(),
+    employeeId:   emp.id,
+    employeeName: emp.name,
+    oldShift:     oldShiftName || '—',
+    newShift:     newShiftName,
+    effectiveFrom,
+    reason:       reason || '',
+    changedAt:    new Date().toISOString()
+  });
+  saveShiftHistory(history);
+}
+
+function generateEmployeeId() {
+  const employees = getEmployees();
+  if (!employees.length) return 'EMP1001';
+  const nums = employees.map(e => parseInt((e.id || '').replace(/\D/g, '')) || 0);
+  return 'EMP' + (Math.max(...nums) + 1);
+}
+
+// ── Attendance ──────────────────────────────────────────────────────────────
+function getAttendance() {
+  return Store.get('bm_attendance', []);
+}
+
+function saveAttendance(records) {
+  Store.set('bm_attendance', records);
+}
+
+function upsertAttendanceRecord(rec) {
+  const all = getAttendance();
+  const idx = all.findIndex(r => r.employeeId === rec.employeeId && r.date === rec.date);
+  if (idx !== -1) { all[idx] = { ...all[idx], ...rec }; }
+  else            { all.unshift(rec); }
+  saveAttendance(all);
+}
+
+function getAttendanceRecord(empId, date) {
+  return getAttendance().find(r => r.employeeId === empId && r.date === date) || null;
+}
+
+// Compute attendance status from punch record + shift definition
+function computeAttendanceStatus(rec, shift) {
+  if (!rec) return 'absent';
+  if (rec.status) return rec.status;                        // admin-set override
+  // Auto-detect holiday / weekly off from date
+  if (rec.date) {
+    if (isHoliday(rec.date))    return 'holiday';
+    if (isWeeklyOff(rec.date))  return 'weekly-off';
+  }
+  if (!rec.punchIn) return 'absent';
+  const grace = shift ? (shift.gracePeriodMinutes || 0) : 15;
+  const shiftHours = shift ? shiftDurationHours(shift) : 8;
+  const worked = rec.hoursWorked || 0;
+  if (worked === 0 && rec.punchIn && !rec.punchOut) return 'present'; // still active
+  if (worked >= shiftHours * 0.75) return 'present';
+  if (worked >= shiftHours * 0.4)  return 'half-day';
+  return 'present';
+}
+
+function shiftDurationHours(shift) {
+  if (!shift || !shift.startTime || !shift.endTime) return 8;
+  const [sh, sm] = shift.startTime.split(':').map(Number);
+  const [eh, em] = shift.endTime.split(':').map(Number);
+  let mins = (eh * 60 + em) - (sh * 60 + sm);
+  if (mins <= 0) mins += 24 * 60;
+  return (mins - (shift.breakMinutes || 0)) / 60;
+}
+
+function lateMinutes(punchIn, shift) {
+  if (!punchIn || !shift || !shift.startTime) return 0;
+  const grace = shift.gracePeriodMinutes || 0;
+  const [sh, sm] = shift.startTime.split(':').map(Number);
+  const p = new Date(punchIn);
+  const pMins = p.getHours() * 60 + p.getMinutes();
+  const shiftMins = sh * 60 + sm;
+  const diff = pMins - shiftMins - grace;
+  return diff > 0 ? diff : 0;
+}
+
+function earlyLeaveMinutes(punchOut, shift) {
+  if (!punchOut || !shift || !shift.endTime) return 0;
+  const [eh, em] = shift.endTime.split(':').map(Number);
+  const p = new Date(punchOut);
+  const pMins = p.getHours() * 60 + p.getMinutes();
+  const endMins = eh * 60 + em;
+  const diff = endMins - pMins;
+  return diff > 0 ? diff : 0;
+}
+
+// ── Holidays & Weekly Off ──────────────────────────────────────────────────
+function getHolidays() {
+  return Store.get('bm_holidays', []);
+}
+function saveHolidays(h) {
+  Store.set('bm_holidays', h);
+}
+function generateHolidayId() {
+  const all = getHolidays();
+  if (!all.length) return 'HOL001';
+  const nums = all.map(h => parseInt((h.id || '').replace(/\D/g, '')) || 0);
+  return 'HOL' + String(Math.max(...nums) + 1).padStart(3, '0');
+}
+function getWeeklyOffDays() {
+  return Store.get('bm_weekly_off', [0]); // default: Sunday
+}
+function saveWeeklyOffDays(days) {
+  Store.set('bm_weekly_off', days);
+}
+function isHoliday(dateStr) {
+  return getHolidays().some(h => h.date === dateStr);
+}
+function getHolidayName(dateStr) {
+  const h = getHolidays().find(h => h.date === dateStr);
+  return h ? h.name : null;
+}
+function isWeeklyOff(dateStr) {
+  const dow = new Date(dateStr + 'T00:00:00').getDay();
+  return getWeeklyOffDays().includes(dow);
+}
+
+// ── Leaves ─────────────────────────────────────────────────────────────────
+function getLeaves() {
+  return Store.get('bm_leaves', []);
+}
+
+function saveLeaves(leaves) {
+  Store.set('bm_leaves', leaves);
+}
+
+function generateLeaveId() {
+  const leaves = getLeaves();
+  if (!leaves.length) return 'LV0001';
+  const nums = leaves.map(l => parseInt((l.id || '').replace(/\D/g, '')) || 0);
+  return 'LV' + String(Math.max(...nums) + 1).padStart(4, '0');
+}
+
+function countLeaveDays(fromDate, toDate) {
+  const f = new Date(fromDate + 'T00:00:00');
+  const t = new Date(toDate   + 'T00:00:00');
+  return Math.max(1, Math.round((t - f) / 86400000) + 1);
+}
+
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function getTodayRecord(employeeId) {
+  return getAttendance().find(r => r.employeeId === employeeId && r.date === todayStr()) || null;
+}
+
+function getMonthAttendance(employeeId, year, month) {
+  const prefix = year + '-' + String(month).padStart(2, '0');
+  return getAttendance().filter(r => r.employeeId === employeeId && r.date.startsWith(prefix));
+}
+
+// ── Overtime ───────────────────────────────────────────────────────────────
+function getOvertime() { return Store.get('bm_overtime', []); }
+function saveOvertime(ot) { Store.set('bm_overtime', ot); }
+function generateOTId() {
+  const all = getOvertime();
+  if (!all.length) return 'OT0001';
+  const nums = all.map(o => parseInt((o.id||'').replace(/\D/g,''))||0);
+  return 'OT' + String(Math.max(...nums)+1).padStart(4,'0');
+}
+function getMonthOT(empId, year, month) {
+  const prefix = year + '-' + String(month).padStart(2,'0');
+  return getOvertime().filter(o => o.employeeId === empId && (o.date||'').startsWith(prefix));
+}
+
+// ── Salary Calculation ─────────────────────────────────────────────────────
+function calculateSalary(empId, year, month) {
+  const emp = getEmployees().find(e => e.id === empId);
+  if (!emp) return null;
+
+  const daysInMonth = new Date(year, month, 0).getDate(); // month is 1-indexed
+  const monthStr = year + '-' + String(month).padStart(2, '0');
+
+  const attRecords = getAttendance().filter(r => r.employeeId === empId && r.date.startsWith(monthStr));
+  const empLeaves  = getLeaves().filter(l =>
+    l.employeeId === empId && l.status === 'approved' &&
+    l.fromDate <= monthStr + '-31' && l.toDate >= monthStr + '-01'
+  );
+
+  let present = 0, halfDay = 0, absent = 0, holiday = 0, weeklyOff = 0;
+  let paidLeave = 0, sickLeave = 0, unpaidLeave = 0;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = monthStr + '-' + String(d).padStart(2, '0');
+    const rec = attRecords.find(r => r.date === dateStr);
+    let status;
+
+    if (rec && rec.status) {
+      status = rec.status;
+    } else if (rec && rec.punchIn) {
+      const worked = rec.hoursWorked || 0;
+      status = worked >= 4 ? (worked >= 6 ? 'present' : 'half-day') : 'present';
+    } else if (isHoliday(dateStr)) {
+      status = 'holiday';
+    } else if (isWeeklyOff(dateStr)) {
+      status = 'weekly-off';
+    } else {
+      const onLeave = empLeaves.find(l => l.fromDate <= dateStr && l.toDate >= dateStr);
+      if (onLeave) {
+        status = onLeave.leaveType === 'unpaid-leave' ? 'unpaid-leave' :
+                 onLeave.leaveType === 'sick-leave'   ? 'sick-leave'   : 'paid-leave';
+      } else {
+        status = 'absent';
+      }
+    }
+
+    switch (status) {
+      case 'present':      present++;      break;
+      case 'on-duty':      present++;      break;
+      case 'half-day':     halfDay++;      break;
+      case 'absent':       absent++;       break;
+      case 'holiday':      holiday++;      break;
+      case 'weekly-off':   weeklyOff++;    break;
+      case 'paid-leave':   paidLeave++;    break;
+      case 'sick-leave':   sickLeave++;    break;
+      case 'unpaid-leave': unpaidLeave++;  break;
+    }
+  }
+
+  const totalWorkingDays = daysInMonth - weeklyOff - holiday;
+  // Paid days = days actually eligible for pay
+  const paidDays = present + (halfDay * 0.5) + paidLeave + sickLeave;
+
+  let grossSalary = 0;
+  let perDayRate  = 0;
+
+  if (emp.salaryType === 'daily') {
+    perDayRate   = parseFloat(emp.dailyWage) || 0;
+    grossSalary  = Math.round(paidDays * perDayRate);
+  } else {
+    const rate   = parseFloat(emp.monthlySalary) || 0;
+    perDayRate   = totalWorkingDays > 0 ? rate / totalWorkingDays : 0;
+    const deduct = (absent + unpaidLeave) * perDayRate;
+    grossSalary  = Math.max(0, Math.round(rate - deduct));
+  }
+
+  const otAmt       = getMonthOT(empId, year, month).reduce((s,o) => s + (o.amount||0), 0);
+  const deductAmt   = getMonthAdvanceTotal(empId, year, month);
+  return {
+    empId, name: emp.name, department: emp.department || '',
+    salaryType: emp.salaryType || 'monthly',
+    dailyWage: parseFloat(emp.dailyWage) || 0,
+    monthlySalary: parseFloat(emp.monthlySalary) || 0,
+    perDayRate: Math.round(perDayRate * 100) / 100,
+    daysInMonth, totalWorkingDays,
+    present, halfDay, absent, holiday, weeklyOff,
+    paidLeave, sickLeave, unpaidLeave,
+    paidDays, grossSalary,
+    otRecords: getMonthOT(empId, year, month),
+    otAmount: otAmt,
+    advanceDetails: getMonthAdvanceDetails(empId, year, month),
+    advanceDeductAmount: deductAmt,
+    netSalary: grossSalary + otAmt - deductAmt
+  };
+}
+
+// ── Payroll Runs ──────────────────────────────────────────────────────────
+function getPayrollRuns() { return Store.get('bm_payroll_runs', []); }
+function savePayrollRuns(r) { Store.set('bm_payroll_runs', r); }
+function generatePayrollId(year, month) { return 'PR' + year + String(month).padStart(2, '0'); }
+
+// ── Advances & Deductions ─────────────────────────────────────────────────
+function getAdvances() { return Store.get('bm_advances', []); }
+function saveAdvances(a) { Store.set('bm_advances', a); }
+function generateAdvanceId() {
+  const all = getAdvances();
+  if (!all.length) return 'ADV0001';
+  const nums = all.map(a => parseInt((a.id||'').replace(/\D/g,''))||0);
+  return 'ADV' + String(Math.max(...nums)+1).padStart(4,'0');
+}
+function getActiveAdvances(empId) {
+  return getAdvances().filter(a => a.employeeId === empId && a.status === 'active');
+}
+function getMonthAdvanceTotal(empId, year, month) {
+  const monthStr = year + '-' + String(month).padStart(2,'0');
+  return getAdvances()
+    .filter(a => a.employeeId === empId)
+    .flatMap(a => (a.payments||[]).filter(p => p.month === monthStr))
+    .reduce((s,p) => s + (p.amount||0), 0);
+}
+function getMonthAdvanceDetails(empId, year, month) {
+  const monthStr = year + '-' + String(month).padStart(2,'0');
+  return getAdvances()
+    .filter(a => a.employeeId === empId)
+    .flatMap(a => (a.payments||[]).filter(p => p.month === monthStr)
+      .map(p => ({ ...p, advanceId: a.id, type: a.type, totalAmount: a.totalAmount })));
+}
+
+// ── Expenses ───────────────────────────────────────────────────────────────
+function getExpenses() {
+  return Store.get('bm_expenses', []);
+}
+
+function saveExpenses(expenses) {
+  Store.set('bm_expenses', expenses);
+}
+
+function generateExpenseId() {
+  const expenses = getExpenses();
+  if (!expenses.length) return 'EXP1001';
+  const nums = expenses.map(e => parseInt((e.id || '').replace(/\D/g, '')) || 0);
+  return 'EXP' + (Math.max(...nums) + 1);
+}

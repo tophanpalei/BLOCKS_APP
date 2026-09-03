@@ -1,0 +1,7 @@
+# Private config — never push to git
+js/config.js
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp

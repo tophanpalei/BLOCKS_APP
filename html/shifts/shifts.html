@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Management — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./shifts.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text">
+        <div>BuildMate</div>
+        <div class="logo-sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html" class="active"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">🕐 Shift Management</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-master-btn"     onclick="switchTab('master')">Shift Master</button>
+        <button class="tab-btn"        id="tab-assign-btn"     onclick="switchTab('assign')">Employee Assignment</button>
+        <button class="tab-btn"        id="tab-history-btn"    onclick="switchTab('history')">Change History</button>
+      </div>
+
+      <!-- ── SHIFT MASTER ── -->
+      <div id="tab-master" class="tab-panel active">
+        <div class="admin-table-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.2rem;border-bottom:1px solid var(--border)">
+            <div style="font-size:0.95rem;font-weight:700">Shift Master</div>
+            <button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.85rem;font-weight:700;border-radius:8px" onclick="openAddShift()">+ Add Shift</button>
+          </div>
+          <div class="tbl-wrap">
+            <table class="shift-table">
+              <thead>
+                <tr>
+                  <th>ID</th><th>Shift Name</th><th>Timings</th><th>Break</th>
+                  <th>Grace</th><th>OT After</th><th>Weekly Off</th><th>Status</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="shift-master-body">
+                <tr><td colspan="9" class="no-row">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── EMPLOYEE ASSIGNMENT ── -->
+      <div id="tab-assign" class="tab-panel">
+        <div class="admin-table-card">
+          <div style="padding:1.1rem 1.2rem;border-bottom:1px solid var(--border)">
+            <div style="font-size:0.95rem;font-weight:700;margin-bottom:0.6rem">Employee Shift Assignment</div>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+              <select id="assign-filter-dept" onchange="renderAssignment()"
+                style="padding:0.45rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;background:var(--bg);color:var(--text)">
+                <option value="">All Departments</option>
+              </select>
+              <select id="assign-filter-shift" onchange="renderAssignment()"
+                style="padding:0.45rem 0.8rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;background:var(--bg);color:var(--text)">
+                <option value="">All Shifts</option>
+              </select>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="shift-table">
+              <thead>
+                <tr>
+                  <th>Employee</th><th>Department</th><th>Current Shift</th><th>Timings</th><th>Weekly Off</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="assign-body">
+                <tr><td colspan="6" class="no-row">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CHANGE HISTORY ── -->
+      <div id="tab-history" class="tab-panel">
+        <div class="admin-table-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.2rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:0.6rem">
+            <div style="font-size:0.95rem;font-weight:700">Shift Change History</div>
+            <div style="display:flex;gap:0.6rem;align-items:center">
+              <input type="text" id="hist-search" placeholder="Search employee…" oninput="renderHistory()"
+                style="padding:0.4rem 0.75rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.85rem;background:var(--bg);color:var(--text);width:180px">
+              <button class="btn-icon danger" onclick="clearHistory()" style="font-size:0.8rem">🗑 Clear All</button>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="shift-table">
+              <thead>
+                <tr>
+                  <th>Date &amp; Time</th><th>Employee</th><th>Previous Shift</th><th>New Shift</th><th>Effective From</th><th>Reason</th>
+                </tr>
+              </thead>
+              <tbody id="history-body">
+                <tr><td colspan="6" class="no-row">No history yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SHIFT ADD/EDIT MODAL ── -->
+<div id="shift-modal" class="admin-modal-overlay">
+  <div class="admin-modal shift-modal">
+    <div class="admin-modal-header" style="padding:1.1rem 1.4rem">
+      <h3 id="shift-modal-title" style="margin:0;font-size:1rem">Add Shift</h3>
+      <button class="modal-close" onclick="closeShiftModal()">✕</button>
+    </div>
+    <div class="modal-sections">
+
+      <!-- Basic -->
+      <div style="margin-bottom:1.3rem">
+        <div class="modal-section-title">⏱ Shift Details</div>
+        <div class="form-grid-2" style="margin-bottom:0.85rem">
+          <div class="form-group span-2">
+            <label>Shift Name *</label>
+            <input type="text" id="sf-name" placeholder="e.g. General Shift">
+          </div>
+          <div class="form-group">
+            <label>Start Time *</label>
+            <input type="time" id="sf-start">
+          </div>
+          <div class="form-group">
+            <label>End Time *</label>
+            <input type="time" id="sf-end">
+          </div>
+        </div>
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label>Break Time (minutes)</label>
+            <input type="number" id="sf-break" placeholder="60" min="0" max="480">
+          </div>
+          <div class="form-group">
+            <label>Grace Period (minutes)</label>
+            <input type="number" id="sf-grace" placeholder="15" min="0" max="60">
+          </div>
+          <div class="form-group">
+            <label>OT Threshold (minutes)</label>
+            <input type="number" id="sf-ot" placeholder="30" min="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly Off -->
+      <div>
+        <div class="modal-section-title">📅 Weekly Off</div>
+        <div class="form-group" style="margin-bottom:0.85rem">
+          <label>Weekly Off Type</label>
+          <select id="sf-wo-type" onchange="toggleWOType()">
+            <option value="fixed">Fixed Weekly Off</option>
+            <option value="rotational">Rotational Weekly Off</option>
+          </select>
+        </div>
+
+        <!-- Fixed -->
+        <div id="sf-fixed-section">
+          <div class="form-group">
+            <label>Select Off Day(s)</label>
+            <div class="days-grid" id="sf-days-grid">
+              <!-- chips rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Rotational -->
+        <div id="sf-rotat-section" style="display:none">
+          <div class="form-group">
+            <label>Rotational Pattern / Note</label>
+            <input type="text" id="sf-rotat-note" placeholder="e.g. Every 7th day rotating, announced weekly">
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div id="shift-modal-error" class="modal-error"></div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeShiftModal()">Cancel</button>
+      <button class="btn-save" onclick="saveShift()">💾 Save Shift</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ASSIGN SHIFT MODAL ── -->
+<div id="assign-modal" class="admin-modal-overlay">
+  <div class="admin-modal" style="max-width:480px;width:96%;padding:0">
+    <div class="admin-modal-header" style="padding:1.1rem 1.4rem">
+      <h3 id="assign-modal-title" style="margin:0;font-size:1rem">Change Shift</h3>
+      <button class="modal-close" onclick="closeAssignModal()">✕</button>
+    </div>
+    <div style="padding:1.3rem 1.4rem">
+      <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.1rem">
+        Employee: <strong id="assign-emp-name" style="color:var(--text)"></strong>
+        &nbsp;·&nbsp; Current: <strong id="assign-current-shift" style="color:var(--primary)"></strong>
+      </div>
+      <div class="form-group" style="margin-bottom:0.9rem">
+        <label>New Shift *</label>
+        <select id="assign-new-shift" style="padding:0.6rem 0.85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.9rem;background:var(--bg);color:var(--text);font-family:var(--font);width:100%"></select>
+      </div>
+      <div class="form-grid-2" style="margin-bottom:0.9rem">
+        <div class="form-group">
+          <label>Effective From *</label>
+          <input type="date" id="assign-effective" style="padding:0.6rem 0.85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.88rem;background:var(--bg);color:var(--text);font-family:var(--font);width:100%;box-sizing:border-box">
+        </div>
+        <div class="form-group">
+          <label>Reason</label>
+          <input type="text" id="assign-reason" placeholder="e.g. Department change" style="padding:0.6rem 0.85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.88rem;background:var(--bg);color:var(--text);font-family:var(--font);width:100%;box-sizing:border-box">
+        </div>
+      </div>
+      <div id="assign-modal-error" style="display:none;color:#c0392b;font-size:0.84rem;padding:0.5rem;background:#fdecea;border-radius:var(--radius-sm)"></div>
+    </div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeAssignModal()">Cancel</button>
+      <button class="btn-save" onclick="confirmAssign()">✅ Assign Shift</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./shifts.js"></script>
+</body>
+</html>

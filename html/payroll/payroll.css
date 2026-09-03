@@ -1,0 +1,50 @@
+/* ── Summary chips ──────────────────────────────── */
+.summary-row { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.2rem; }
+.sc { flex:1; min-width:130px; background:var(--card); border-radius:var(--radius); padding:1rem 1.3rem; box-shadow:var(--shadow); }
+.sc .sv { font-size:1.35rem; font-weight:800; color:var(--primary); }
+.sc .sl { font-size:.73rem; color:var(--text-muted); margin-top:.2rem; text-transform:uppercase; font-weight:600; }
+
+/* ── Runs list ──────────────────────────────────── */
+.run-table { width:100%; border-collapse:collapse; font-size:.87rem; }
+.run-table th { background:var(--bg); padding:.6rem .9rem; text-align:left; font-size:.72rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; border-bottom:2px solid var(--border); white-space:nowrap; }
+.run-table td { padding:.65rem .9rem; border-bottom:1px solid var(--border); vertical-align:middle; }
+.run-table tr:last-child td { border-bottom:none; }
+.run-table tr:hover td { background:var(--bg); }
+.tbl-wrap { overflow-x:auto; }
+.no-row { text-align:center; padding:3rem; color:var(--text-muted); font-size:.88rem; }
+
+/* ── Status badges ──────────────────────────────── */
+.badge-draft    { background:#f5f5f5; color:#757575; padding:.2rem .65rem; border-radius:999px; font-size:.72rem; font-weight:700; }
+.badge-approved { background:#e3f2fd; color:#1565c0; padding:.2rem .65rem; border-radius:999px; font-size:.72rem; font-weight:700; }
+.badge-paid     { background:#e8f5e9; color:#2e7d32; padding:.2rem .65rem; border-radius:999px; font-size:.72rem; font-weight:700; }
+
+/* ── Detail view ────────────────────────────────── */
+.detail-header { display:flex; align-items:center; gap:1rem; padding:1.1rem 1.4rem; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.detail-header h2 { margin:0; font-size:1.1rem; font-weight:800; }
+.back-btn { padding:.38rem .85rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:.83rem; cursor:pointer; background:var(--bg); color:var(--text); }
+
+.pr-table { width:100%; border-collapse:collapse; font-size:.84rem; }
+.pr-table th { background:var(--bg); padding:.6rem .8rem; text-align:left; font-size:.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; border-bottom:2px solid var(--border); white-space:nowrap; }
+.pr-table td { padding:.6rem .8rem; border-bottom:1px solid var(--border); vertical-align:middle; }
+.pr-table tr:last-child td { border-bottom:none; }
+.pr-table tr:hover td { background:var(--bg); }
+.pr-table th.amt, .pr-table td.amt { text-align:right; }
+.pr-table th.ctr, .pr-table td.ctr { text-align:center; }
+
+.inline-input { width:80px; padding:.3rem .5rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:.83rem; background:var(--bg); color:var(--text); text-align:right; }
+.inline-input:focus { outline:none; border-color:var(--primary); }
+.inline-input:disabled { background:var(--bg); opacity:.5; cursor:not-allowed; }
+
+.action-bar { display:flex; gap:.8rem; align-items:center; padding:1rem 1.4rem; border-top:2px solid var(--border); background:var(--card); flex-wrap:wrap; }
+.action-bar .totals-text { flex:1; font-size:.84rem; color:var(--text-muted); }
+.paid-stamp { font-size:.88rem; font-weight:800; color:#2e7d32; background:#e8f5e9; padding:.4rem 1rem; border-radius:999px; border:2px solid #81c784; }
+
+.filter-bar { display:flex; gap:.7rem; align-items:flex-end; flex-wrap:wrap; padding:.9rem 1.2rem; border-bottom:1px solid var(--border); background:var(--card); border-radius:var(--radius) var(--radius) 0 0; }
+.filter-bar label { font-size:.76rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:.22rem; }
+.filter-bar select { padding:.42rem .7rem; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:.85rem; background:var(--bg); color:var(--text); }
+.btn-run { padding:.44rem 1.2rem; background:var(--primary); color:#fff; border:none; border-radius:var(--radius-sm); font-size:.88rem; font-weight:700; cursor:pointer; }
+.btn-run:hover { opacity:.9; }
+
+.gross-col { color:#1a73e8; font-weight:700; }
+.net-col   { color:#2e7d32; font-weight:800; font-size:.93rem; }
+.ded-col   { color:#e74c3c; }

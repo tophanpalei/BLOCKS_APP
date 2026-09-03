@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Management — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./leave.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text"><div>BuildMate</div><div class="logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html" class="active"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer"><a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a></div>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">🏖️ Leave Management</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="btn-primary" style="padding:.42rem 1rem;font-size:.85rem;font-weight:700;border-radius:8px" onclick="openAddLeave()">+ Apply Leave</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="admin-table-card">
+
+        <!-- Filters -->
+        <div class="filter-bar">
+          <div>
+            <label>Employee</label>
+            <select id="f-emp" onchange="render()">
+              <option value="">All Employees</option>
+            </select>
+          </div>
+          <div>
+            <label>Type</label>
+            <select id="f-type" onchange="render()">
+              <option value="">All Types</option>
+              <option value="leave">Leave</option>
+              <option value="sick-leave">Sick Leave</option>
+              <option value="unpaid-leave">Unpaid Leave</option>
+            </select>
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="f-status" onchange="render()">
+              <option value="">All</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div>
+            <label>Month</label>
+            <select id="f-month" onchange="render()">
+              <option value="">All Months</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-strip" id="summary-strip"></div>
+
+        <!-- Table -->
+        <div class="tbl-wrap">
+          <table class="lv-table">
+            <thead>
+              <tr>
+                <th>Applied On</th>
+                <th>Employee</th>
+                <th>Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Days</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="leave-body">
+              <tr><td colspan="9" class="no-row">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT LEAVE MODAL -->
+<div id="leave-modal" class="admin-modal-overlay">
+  <div class="admin-modal" style="max-width:480px;width:96%;padding:0">
+    <div class="admin-modal-header" style="padding:1rem 1.3rem">
+      <h3 id="lv-modal-title" style="margin:0;font-size:1rem">Apply Leave</h3>
+      <button class="modal-close" onclick="closeLeaveModal()">✕</button>
+    </div>
+    <div style="padding:1.2rem 1.3rem">
+      <div class="form-grid-2" style="margin-bottom:.85rem">
+        <div class="form-group span-2">
+          <label>Employee *</label>
+          <select id="lv-emp"></select>
+        </div>
+        <div class="form-group span-2">
+          <label>Leave Type *</label>
+          <select id="lv-type">
+            <option value="leave">Leave (Paid)</option>
+            <option value="sick-leave">Sick Leave</option>
+            <option value="unpaid-leave">Unpaid Leave</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>From Date *</label>
+          <input type="date" id="lv-from" onchange="updateDays()">
+        </div>
+        <div class="form-group">
+          <label>To Date *</label>
+          <input type="date" id="lv-to" onchange="updateDays()">
+        </div>
+        <div class="form-group span-2">
+          <label>Number of Days</label>
+          <input type="text" id="lv-days" readonly style="background:var(--bg);color:var(--primary);font-weight:700" value="—">
+        </div>
+        <div class="form-group span-2">
+          <label>Reason</label>
+          <input type="text" id="lv-reason" placeholder="e.g. Personal work, fever…">
+        </div>
+        <div class="form-group span-2">
+          <label>Status</label>
+          <select id="lv-status">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div class="form-group span-2" id="lv-note-group" style="display:none">
+          <label>Rejection Note</label>
+          <input type="text" id="lv-note" placeholder="Reason for rejection">
+        </div>
+      </div>
+      <div id="lv-modal-error" style="display:none;color:#c0392b;font-size:.83rem;padding:.45rem;background:#fdecea;border-radius:var(--radius-sm)"></div>
+    </div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeLeaveModal()">Cancel</button>
+      <button class="btn-save" onclick="saveLeave()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- REJECT CONFIRMATION MODAL -->
+<div id="reject-modal" class="admin-modal-overlay">
+  <div class="admin-modal" style="max-width:380px;width:96%;padding:0">
+    <div class="admin-modal-header" style="padding:1rem 1.3rem">
+      <h3 style="margin:0;font-size:1rem">Reject Leave</h3>
+      <button class="modal-close" onclick="document.getElementById('reject-modal').classList.remove('active')">✕</button>
+    </div>
+    <div style="padding:1.2rem 1.3rem">
+      <div class="form-group">
+        <label>Rejection Note (optional)</label>
+        <input type="text" id="reject-note" placeholder="e.g. Insufficient leave balance">
+      </div>
+    </div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="document.getElementById('reject-modal').classList.remove('active')">Cancel</button>
+      <button class="btn-save" style="background:#e74c3c;border-color:#e74c3c" onclick="confirmReject()">Reject</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./leave.js"></script>
+</body>
+</html>

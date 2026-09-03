@@ -1,0 +1,46 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Netlify configuration for BuildMate
+#
+# HOW IT WORKS:
+#   1. You store SHEETS_URL and SHEETS_SECRET in Netlify Dashboard
+#      (Site settings → Environment variables) — never in your code
+#   2. Before every deploy, Netlify runs build-config.js which creates
+#      js/config.js from those env vars
+#   3. The app loads normally; secrets stay out of your git repo
+#
+# SETUP STEPS:
+#   1. Push this project to GitHub
+#   2. Connect repo to Netlify (app.netlify.com → Add new site)
+#   3. In Netlify Dashboard → Site settings → Environment variables, add:
+#         SHEETS_URL    = your Apps Script URL
+#         SHEETS_SECRET = your secret key
+#   4. Trigger a deploy — Netlify builds config.js automatically
+# ─────────────────────────────────────────────────────────────────────────────
+
+[build]
+  command = "node build-config.js"
+  publish = "."
+
+# Cache settings
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, must-revalidate"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"

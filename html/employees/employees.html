@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employees — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./employees.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text">
+        <div>BuildMate</div>
+        <div class="logo-sub">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html" class="active"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)" id="sidebar-toggle">☰</button>
+        <div class="admin-topbar-title">👷 Employee Management</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="btn-primary" style="padding:0.45rem 1rem;border-radius:8px;font-size:0.85rem;font-weight:700" onclick="openAddEmployee()">+ Add Employee</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-employees-btn" onclick="switchTab('employees')">Employees</button>
+        <button class="tab-btn" id="tab-departments-btn" onclick="switchTab('departments')">Department Master</button>
+        <button class="tab-btn" id="tab-salary-btn" onclick="switchTab('salary')">Salary Calculator</button>
+      </div>
+
+      <!-- EMPLOYEES TAB -->
+      <div id="tab-employees" class="tab-panel active">
+        <div class="admin-table-card">
+          <div class="emp-table-wrap">
+            <table class="emp-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Employee</th>
+                  <th>Type</th>
+                  <th>Department</th>
+                  <th>Designation</th>
+                  <th>Shift</th>
+                  <th>Salary</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="emp-list-body">
+                <tr><td colspan="9" class="no-emp">No employees yet. Click "+ Add Employee" to get started.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEPARTMENTS TAB -->
+      <div id="tab-departments" class="tab-panel">
+        <div class="admin-table-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:1.1rem 1.2rem;border-bottom:1px solid var(--border)">
+            <div style="font-size:0.95rem;font-weight:700">🏢 Department Master</div>
+            <button class="btn-primary" style="padding:0.4rem 1rem;font-size:0.85rem;font-weight:700;border-radius:8px" onclick="openAddDept()">+ Add Department</button>
+          </div>
+          <div class="emp-table-wrap">
+            <table class="emp-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Department Name</th>
+                  <th>Employees</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dept-list-body">
+                <tr><td colspan="5" class="no-emp">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SALARY CALCULATOR TAB -->
+      <div id="tab-salary" class="tab-panel">
+        <div class="admin-table-card">
+          <div style="padding:1.2rem 1.2rem 0">
+            <div class="salary-filters">
+              <div>
+                <label>Month</label>
+                <select id="sal-month">
+                  <option value="1">January</option><option value="2">February</option>
+                  <option value="3">March</option><option value="4">April</option>
+                  <option value="5">May</option><option value="6">June</option>
+                  <option value="7">July</option><option value="8">August</option>
+                  <option value="9">September</option><option value="10">October</option>
+                  <option value="11">November</option><option value="12">December</option>
+                </select>
+              </div>
+              <div>
+                <label>Year</label>
+                <select id="sal-year"></select>
+              </div>
+              <button class="btn-primary" onclick="calcSalary()" style="align-self:flex-end">Calculate</button>
+            </div>
+          </div>
+          <div class="emp-table-wrap">
+            <table class="salary-table">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Department</th>
+                  <th>Salary Type</th>
+                  <th>Rate</th>
+                  <th>Days Present</th>
+                  <th>Hours Worked</th>
+                  <th>Salary Due</th>
+                </tr>
+              </thead>
+              <tbody id="salary-body">
+                <tr><td colspan="7" class="salary-empty">Select a month and click Calculate</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEPARTMENT ADD/EDIT MODAL -->
+<div id="dept-modal" class="admin-modal-overlay">
+  <div class="admin-modal" style="max-width:420px;width:96%;padding:0">
+    <div class="admin-modal-header" style="padding:1.1rem 1.4rem">
+      <h3 id="dept-modal-title" style="margin:0;font-size:1rem">Add Department</h3>
+      <button class="modal-close" onclick="closeDeptModal()">✕</button>
+    </div>
+    <div style="padding:1.3rem 1.4rem">
+      <div class="form-group" style="margin-bottom:1rem">
+        <label>Department Name *</label>
+        <input type="text" id="dept-name-input" placeholder="e.g. Production" style="padding:0.65rem 0.9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.9rem;width:100%;box-sizing:border-box;background:var(--bg);color:var(--text);font-family:var(--font)">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="dept-status-input" style="padding:0.65rem 0.9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:0.9rem;width:100%;box-sizing:border-box;background:var(--bg);color:var(--text);font-family:var(--font)">
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+      <div id="dept-modal-error" style="display:none;margin-top:0.75rem;color:#c0392b;font-size:0.84rem;padding:0.5rem;background:#fdecea;border-radius:var(--radius-sm)"></div>
+    </div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeDeptModal()">Cancel</button>
+      <button class="btn-save" onclick="saveDept()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW EMPLOYEE MODAL -->
+<div id="emp-view-modal" class="admin-modal-overlay">
+  <div class="admin-modal wide" style="width:96%;max-height:92vh;display:flex;flex-direction:column">
+    <div class="admin-modal-header" style="padding:1.2rem 1.5rem;flex-shrink:0">
+      <h3 style="margin:0;font-size:1.05rem">Employee Details</h3>
+      <div style="display:flex;gap:0.6rem;align-items:center">
+        <button id="ev-edit-btn" onclick="openEditFromView()" class="btn-save" style="padding:0.35rem 0.85rem;font-size:0.82rem">✏️ Edit</button>
+        <button class="modal-close" onclick="closeViewModal()">✕</button>
+      </div>
+    </div>
+    <div style="overflow-y:auto;flex:1;padding:1.5rem">
+
+      <!-- Profile header -->
+      <div style="display:flex;align-items:center;gap:1.2rem;padding:1.2rem;background:var(--bg);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:1.5rem">
+        <div id="ev-photo" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2.2rem;background:var(--card-bg);flex-shrink:0"></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap">
+            <div id="ev-name" style="font-size:1.2rem;font-weight:800"></div>
+            <div id="ev-type-badge"></div>
+            <div id="ev-status-badge"></div>
+          </div>
+          <div id="ev-designation" style="color:var(--text-muted);font-size:0.88rem;margin-top:0.2rem"></div>
+          <div id="ev-dept-shift" style="color:var(--text-muted);font-size:0.82rem;margin-top:0.15rem"></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:0.72rem;color:var(--text-muted);font-weight:600;text-transform:uppercase">Employee ID</div>
+          <div id="ev-id" style="font-family:monospace;font-size:1.05rem;font-weight:700;color:var(--primary)"></div>
+          <div id="ev-join-date" style="font-size:0.78rem;color:var(--text-muted);margin-top:0.2rem"></div>
+        </div>
+      </div>
+
+      <!-- Detail sections -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem">
+
+        <!-- Personal Information -->
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem">
+          <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--primary);margin-bottom:0.9rem;padding-bottom:0.4rem;border-bottom:1.5px solid var(--border)">👤 Personal Information</div>
+          <div id="ev-personal"></div>
+        </div>
+
+        <!-- Contact Information -->
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem">
+          <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--primary);margin-bottom:0.9rem;padding-bottom:0.4rem;border-bottom:1.5px solid var(--border)">📞 Contact Information</div>
+          <div id="ev-contact"></div>
+        </div>
+
+        <!-- Employment Details -->
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem">
+          <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--primary);margin-bottom:0.9rem;padding-bottom:0.4rem;border-bottom:1.5px solid var(--border)">🏢 Employment Details</div>
+          <div id="ev-employment"></div>
+        </div>
+
+        <!-- Salary -->
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem">
+          <div style="font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--primary);margin-bottom:0.9rem;padding-bottom:0.4rem;border-bottom:1.5px solid var(--border)">💰 Salary Information</div>
+          <div id="ev-salary"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT EMPLOYEE MODAL -->
+<div id="emp-modal" class="admin-modal-overlay">
+  <div class="admin-modal wide" style="width:96%">
+
+    <div class="admin-modal-header" style="padding:1.2rem 1.5rem">
+      <h3 id="emp-modal-title" style="margin:0;font-size:1.05rem">Add Employee</h3>
+      <button class="modal-close" onclick="closeEmpModal()">✕</button>
+    </div>
+
+    <div class="modal-sections">
+
+      <!-- PHOTO + ID -->
+      <div class="modal-section">
+        <div class="modal-section-title">👤 Employee Profile</div>
+        <div class="photo-upload-row" style="margin-bottom:1.2rem">
+          <div class="photo-preview" id="ef-photo-preview" onclick="document.getElementById('ef-photo-file').click()" title="Click to upload photo">
+            <span id="ef-photo-placeholder">👷</span>
+            <img id="ef-photo-thumb" src="" alt="">
+          </div>
+          <div class="photo-actions">
+            <input type="file" id="ef-photo-file" accept="image/*" style="display:none" onchange="handleEmpPhotoUpload(this)">
+            <button type="button" onclick="document.getElementById('ef-photo-file').click()"
+              style="padding:0.4rem 0.9rem;border:1.5px solid var(--border);border-radius:8px;font-size:0.82rem;background:var(--card-bg);color:var(--text);cursor:pointer;font-family:var(--font)">
+              📷 Upload Photo
+            </button>
+            <button type="button" id="ef-photo-remove" onclick="clearEmpPhoto()" style="display:none;padding:0.35rem 0.7rem;border:1.5px solid var(--danger);border-radius:8px;font-size:0.78rem;background:none;color:var(--danger);cursor:pointer;font-family:var(--font)">
+              ✕ Remove
+            </button>
+            <span class="photo-hint">JPG/PNG · max 2 MB</span>
+          </div>
+          <div style="margin-left:auto;text-align:right">
+            <div style="font-size:0.75rem;color:var(--text-muted)">Employee ID</div>
+            <div id="ef-id-display" style="font-family:monospace;font-size:1rem;font-weight:700;color:var(--primary)">Auto</div>
+          </div>
+          <input type="hidden" id="ef-photo-data" value="">
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="ef-name" placeholder="e.g. Ravi Kumar">
+          </div>
+          <div class="form-group">
+            <label>Father's / Spouse's Name</label>
+            <input type="text" id="ef-parent-name" placeholder="e.g. Suresh Kumar">
+          </div>
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" id="ef-dob">
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="ef-gender">
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="modal-section">
+        <div class="modal-section-title">📞 Contact Information</div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" id="ef-phone" placeholder="9876543210" maxlength="15">
+          </div>
+          <div class="form-group">
+            <label>Alternate Mobile Number</label>
+            <input type="tel" id="ef-alt-phone" placeholder="9876543210" maxlength="15">
+          </div>
+          <div class="form-group span-2">
+            <label>Address</label>
+            <input type="text" id="ef-address" placeholder="House No., Street, Area">
+          </div>
+          <div class="form-group">
+            <label>Village / Town</label>
+            <input type="text" id="ef-village" placeholder="e.g. Channasandra">
+          </div>
+          <div class="form-group">
+            <label>District</label>
+            <input type="text" id="ef-district" placeholder="e.g. Bengaluru Urban">
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="ef-state" placeholder="e.g. Karnataka">
+          </div>
+          <div class="form-group">
+            <label>PIN Code</label>
+            <input type="text" id="ef-pincode" placeholder="560001" maxlength="6">
+          </div>
+          <div class="form-group span-2">
+            <label>Emergency Contact (Name &amp; Phone)</label>
+            <input type="text" id="ef-emergency" placeholder="e.g. Suresh Kumar — 9876543210">
+          </div>
+        </div>
+      </div>
+
+      <!-- EMPLOYMENT -->
+      <div class="modal-section">
+        <div class="modal-section-title">🏢 Employment Details</div>
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label>Joining Date</label>
+            <input type="date" id="ef-join-date">
+          </div>
+          <div class="form-group">
+            <label>Employment Status</label>
+            <select id="ef-status">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Employee Type *</label>
+            <select id="ef-emp-type">
+              <option value="permanent">Permanent Employee</option>
+              <option value="temporary">Temporary Employee</option>
+              <option value="contract">Contract Employee</option>
+              <option value="daily-wage">Daily-Wage Employee</option>
+              <option value="parttime">Part-Time Employee</option>
+              <option value="trainee">Trainee / Apprentice</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <select id="ef-department">
+              <option value="">Select Department</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Designation</label>
+            <input type="text" id="ef-designation" placeholder="e.g. Loader, Driver, Supervisor">
+          </div>
+          <div class="form-group">
+            <label>Reporting Manager</label>
+            <input type="text" id="ef-reporting-manager" placeholder="Manager name" list="manager-suggestions">
+            <datalist id="manager-suggestions"></datalist>
+          </div>
+          <div class="form-group">
+            <label>Work Location</label>
+            <input type="text" id="ef-work-location" placeholder="e.g. Main Yard, Site A">
+          </div>
+          <div class="form-group">
+            <label>Shift</label>
+            <select id="ef-shift">
+              <option value="">Select Shift</option>
+              <option value="General">General (9 AM – 6 PM)</option>
+              <option value="Morning">Morning (6 AM – 2 PM)</option>
+              <option value="Evening">Evening (2 PM – 10 PM)</option>
+              <option value="Night">Night (10 PM – 6 AM)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Login PIN (Attendance) — defaults to Emp No.</label>
+            <input type="text" id="ef-pin" placeholder="Auto from Emp No." maxlength="8">
+          </div>
+        </div>
+      </div>
+
+      <!-- SALARY -->
+      <div class="modal-section" style="margin-bottom:0">
+        <div class="modal-section-title">💰 Salary Information</div>
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label>Salary Type *</label>
+            <select id="ef-salary-type" onchange="updateSalaryFields()">
+              <option value="daily">Daily Wage</option>
+              <option value="monthly">Monthly Salary</option>
+            </select>
+          </div>
+          <div class="form-group" id="ef-daily-group">
+            <label>Daily Wage (₹)</label>
+            <input type="number" id="ef-daily-wage" placeholder="e.g. 600" min="0">
+          </div>
+          <div class="form-group" id="ef-monthly-group" style="display:none">
+            <label>Monthly Salary (₹)</label>
+            <input type="number" id="ef-monthly-salary" placeholder="e.g. 15000" min="0">
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /modal-sections -->
+
+    <div id="emp-modal-error" style="display:none;margin:0 1.5rem 0.5rem;color:#c0392b;font-size:0.85rem;padding:0.5rem;background:#fdecea;border-radius:var(--radius-sm)"></div>
+
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeEmpModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEmployee()">💾 Save Employee</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./employees.js"></script>
+</body>
+</html>

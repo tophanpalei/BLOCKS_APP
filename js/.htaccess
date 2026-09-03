@@ -1,0 +1,32 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Place this file at:  js/.htaccess
+# (Apache / cPanel / shared hosting)
+#
+# WHAT THIS DOES:
+#   Blocks anyone from typing  yourdomain.com/js/config.js  in their browser.
+#   The app itself still loads config.js normally via <script> tag.
+#
+# IMPORTANT:
+#   Change "yourdomain.com" below to your actual domain before uploading.
+# ─────────────────────────────────────────────────────────────────────────────
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Block direct access to config.js
+  # Allow only requests that come from your own domain (Referer header check)
+  <Files "config.js">
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?yourdomain\.com [NC]
+    RewriteCond %{HTTP_REFERER} !^$  [NC]
+    RewriteRule ^ - [F,L]
+
+    # Also block empty referer (direct URL bar access) — uncomment if you want stricter:
+    # RewriteCond %{HTTP_REFERER} ^$
+    # RewriteRule ^ - [F,L]
+  </Files>
+</IfModule>
+
+# Prevent config.js from being indexed by search engines
+<Files "config.js">
+  Header set X-Robots-Tag "noindex, nofollow"
+</Files>

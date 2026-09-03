@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expenses — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./expenses.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text">
+        <div>BuildMate</div>
+        <div class="logo-sub">Admin Panel</div>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html" class="active"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)" id="sidebar-toggle">☰</button>
+        <div class="admin-topbar-title">💰 Expenses</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="btn-primary" style="padding:0.45rem 1rem;border-radius:8px;font-size:0.85rem;font-weight:700" onclick="openAddExpense()">+ Add Expense</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- SUMMARY CARDS -->
+      <div class="summary-grid" id="summary-cards">
+        <div class="summary-card primary">
+          <div class="s-label">This Month Total</div>
+          <div class="s-value" id="s-month-total">₹0</div>
+          <div class="s-sub" id="s-month-label"></div>
+        </div>
+        <div class="summary-card danger">
+          <div class="s-label">Pending Payments</div>
+          <div class="s-value" id="s-pending-amt">₹0</div>
+          <div class="s-sub" id="s-pending-count"></div>
+        </div>
+        <div class="summary-card">
+          <div class="s-label">Total Entries</div>
+          <div class="s-value" id="s-total-entries">0</div>
+          <div class="s-sub">all time</div>
+        </div>
+        <div class="summary-card success">
+          <div class="s-label">All-Time Spent</div>
+          <div class="s-value" id="s-alltime-total">₹0</div>
+          <div class="s-sub">across all vendors</div>
+        </div>
+      </div>
+
+      <!-- FILTERS -->
+      <div class="admin-table-card" style="padding:1rem 1.2rem">
+        <div class="filter-row">
+          <div>
+            <label>Month</label>
+            <select id="f-month">
+              <option value="">All Months</option>
+              <option value="01">January</option><option value="02">February</option>
+              <option value="03">March</option><option value="04">April</option>
+              <option value="05">May</option><option value="06">June</option>
+              <option value="07">July</option><option value="08">August</option>
+              <option value="09">September</option><option value="10">October</option>
+              <option value="11">November</option><option value="12">December</option>
+            </select>
+          </div>
+          <div>
+            <label>Year</label>
+            <select id="f-year"><option value="">All Years</option></select>
+          </div>
+          <div>
+            <label>Search Vendor / Material</label>
+            <input type="text" id="f-search" placeholder="Type to search…" oninput="renderExpenses()">
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="f-status" onchange="renderExpenses()">
+              <option value="">All</option>
+              <option value="Paid">Paid</option>
+              <option value="Pending">Pending</option>
+              <option value="Credit">Credit</option>
+            </select>
+          </div>
+          <button class="btn-primary" onclick="renderExpenses()" style="align-self:flex-end">Filter</button>
+        </div>
+      </div>
+
+      <!-- EXPENSE TABLE -->
+      <div class="admin-table-card" style="margin-top:1rem">
+        <div class="exp-table-wrap">
+          <table class="exp-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Vendor</th>
+                <th>Phone</th>
+                <th>Material</th>
+                <th>Qty</th>
+                <th>Unit</th>
+                <th>Price/Unit</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="exp-table-body">
+              <tr><td colspan="13" class="no-exp">No expenses yet. Click "+ Add Expense" to get started.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT EXPENSE MODAL -->
+<div id="exp-modal" class="admin-modal-overlay">
+  <div class="admin-modal">
+    <h3 id="exp-modal-title">Add Expense</h3>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date *</label>
+        <input type="date" id="ef-date">
+      </div>
+      <div class="form-group">
+        <label>Payment Status *</label>
+        <select id="ef-status">
+          <option value="Paid">Paid</option>
+          <option value="Pending">Pending</option>
+          <option value="Credit">Credit</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Vendor Name *</label>
+        <input type="text" id="ef-vendor" placeholder="e.g. Kumar Traders" list="vendor-suggestions">
+        <datalist id="vendor-suggestions"></datalist>
+      </div>
+      <div class="form-group">
+        <label>Vendor Phone</label>
+        <input type="tel" id="ef-vendor-phone" placeholder="9876543210" maxlength="15">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Material / Item *</label>
+        <input type="text" id="ef-material" placeholder="e.g. Cement, Sand, Steel">
+      </div>
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select id="ef-payment">
+          <option value="Cash">Cash</option>
+          <option value="UPI">UPI</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Cheque">Cheque</option>
+          <option value="Credit">Credit / Later</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row three">
+      <div class="form-group">
+        <label>Quantity *</label>
+        <input type="number" id="ef-qty" placeholder="100" min="0" step="any" oninput="calcExpTotal()">
+      </div>
+      <div class="form-group">
+        <label>Unit</label>
+        <input type="text" id="ef-unit" placeholder="Bags, Tons, Pcs" list="unit-suggestions">
+        <datalist id="unit-suggestions">
+          <option value="Bags"><option value="Tons"><option value="Pieces">
+          <option value="Kg"><option value="Litres"><option value="Metres">
+          <option value="Sq.ft"><option value="Loads">
+        </datalist>
+      </div>
+      <div class="form-group">
+        <label>Price per Unit (₹) *</label>
+        <input type="number" id="ef-price" placeholder="350" min="0" step="any" oninput="calcExpTotal()">
+      </div>
+    </div>
+
+    <div class="total-preview">
+      <span>Total Amount</span>
+      <strong id="ef-total-display">₹0</strong>
+    </div>
+
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="ef-notes" placeholder="Any additional details…"></textarea>
+    </div>
+
+    <div id="exp-modal-error" style="display:none;color:#c0392b;font-size:0.85rem;padding:0.5rem;background:#fdecea;border-radius:var(--radius-sm);margin-bottom:0.5rem"></div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeExpModal()">Cancel</button>
+      <button class="btn-save" onclick="saveExpense()">Save Expense</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./expenses.js"></script>
+</body>
+</html>
