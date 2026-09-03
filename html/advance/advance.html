@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advances & Deductions — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./advance.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text"><div>BuildMate</div><div class="logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html" class="active"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer"><a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a></div>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">💳 Advances & Deductions</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="btn-primary" style="padding:.42rem 1rem;font-size:.85rem;font-weight:700;border-radius:8px" onclick="openAddModal()">+ New Entry</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Summary -->
+      <div class="summary-row" id="summary-row">
+        <div class="summary-chip"><div class="sc-val" id="s-active">0</div><div class="sc-lbl">Active Cases</div></div>
+        <div class="summary-chip"><div class="sc-val" id="s-outstanding">₹0</div><div class="sc-lbl">Total Outstanding</div></div>
+        <div class="summary-chip"><div class="sc-val" id="s-recovered">₹0</div><div class="sc-lbl">Total Recovered</div></div>
+        <div class="summary-chip"><div class="sc-val" id="s-month">₹0</div><div class="sc-lbl">Deducted This Month</div></div>
+      </div>
+
+      <!-- Table -->
+      <div class="admin-table-card">
+        <div class="filter-bar">
+          <select id="f-emp" onchange="render()">
+            <option value="">All Employees</option>
+          </select>
+          <select id="f-type" onchange="render()">
+            <option value="">All Types</option>
+            <option value="Advance">Advance</option>
+            <option value="Loan">Loan</option>
+            <option value="Deduction">Deduction</option>
+          </select>
+          <select id="f-status" onchange="render()">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="cleared">Cleared</option>
+          </select>
+          <span id="adv-count" style="font-size:.82rem;color:var(--text-muted);margin-left:.3rem"></span>
+        </div>
+        <div class="tbl-wrap">
+          <table class="adv-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Employee</th>
+                <th>Type</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Remaining</th>
+                <th>Monthly Deduction</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adv-body">
+              <tr><td colspan="9" class="no-row">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Add / Edit Modal -->
+<div id="adv-modal" class="admin-modal-overlay">
+  <div class="admin-modal" style="max-width:480px;width:96%;padding:0">
+    <div class="admin-modal-header" style="padding:1rem 1.3rem">
+      <h3 id="adv-modal-title" style="margin:0;font-size:1rem">New Advance / Deduction</h3>
+      <button class="modal-close" onclick="closeModal('adv-modal')">✕</button>
+    </div>
+    <div style="padding:1.2rem 1.3rem 0.5rem">
+      <div class="form-row2">
+        <div class="form-group">
+          <label>Employee *</label>
+          <select id="adv-emp"></select>
+        </div>
+        <div class="form-group">
+          <label>Type *</label>
+          <select id="adv-type">
+            <option value="Advance">Advance</option>
+            <option value="Loan">Loan</option>
+            <option value="Deduction">Deduction</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row2">
+        <div class="form-group">
+          <label>Total Amount (₹) *</label>
+          <input type="number" id="adv-total" min="1" placeholder="e.g. 10000">
+        </div>
+        <div class="form-group">
+          <label>Monthly Deduction (₹)</label>
+          <input type="number" id="adv-monthly" min="0" placeholder="e.g. 2000 (0 = one-time)">
+        </div>
+      </div>
+      <div class="form-row2">
+        <div class="form-group">
+          <label>Start Date *</label>
+          <input type="date" id="adv-date">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="adv-status">
+            <option value="active">Active</option>
+            <option value="cleared">Cleared</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Note</label>
+        <textarea id="adv-note" placeholder="Optional note (e.g. Festival advance)"></textarea>
+      </div>
+      <div id="adv-error" style="display:none;color:#c0392b;font-size:.83rem;padding:.45rem;background:#fdecea;border-radius:var(--radius-sm);margin-bottom:.8rem"></div>
+    </div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeModal('adv-modal')">Cancel</button>
+      <button class="btn-save" onclick="saveAdvanceEntry()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- View / Apply Deduction Modal -->
+<div id="view-modal" class="admin-modal-overlay">
+  <div class="admin-modal" style="max-width:520px;width:96%;padding:0">
+    <div class="admin-modal-header" style="padding:1rem 1.3rem">
+      <h3 id="view-title" style="margin:0;font-size:1rem">Advance Details</h3>
+      <button class="modal-close" onclick="closeModal('view-modal')">✕</button>
+    </div>
+    <div id="view-body" style="padding:1.2rem 1.3rem;max-height:70vh;overflow-y:auto"></div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeModal('view-modal')">Close</button>
+      <button class="btn-save" id="apply-btn" onclick="openApplyDeduction()">+ Apply Monthly Deduction</button>
+    </div>
+  </div>
+</div>
+
+<!-- Apply Deduction Sub-Modal -->
+<div id="apply-modal" class="admin-modal-overlay" style="z-index:10001">
+  <div class="admin-modal" style="max-width:360px;width:96%;padding:0">
+    <div class="admin-modal-header" style="padding:1rem 1.3rem">
+      <h3 style="margin:0;font-size:1rem">Apply Deduction</h3>
+      <button class="modal-close" onclick="closeModal('apply-modal')">✕</button>
+    </div>
+    <div style="padding:1.2rem 1.3rem 0.5rem">
+      <div class="form-group">
+        <label>Month *</label>
+        <select id="apply-month">
+          <option value="01">January</option><option value="02">February</option><option value="03">March</option>
+          <option value="04">April</option><option value="05">May</option><option value="06">June</option>
+          <option value="07">July</option><option value="08">August</option><option value="09">September</option>
+          <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Year *</label>
+        <select id="apply-year">
+          <option value="2024">2024</option><option value="2025">2025</option>
+          <option value="2026">2026</option><option value="2027">2027</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Amount (₹) *</label>
+        <input type="number" id="apply-amount" min="1">
+      </div>
+      <div class="form-group">
+        <label>Note</label>
+        <input type="text" id="apply-note" placeholder="Optional">
+      </div>
+      <div id="apply-error" style="display:none;color:#c0392b;font-size:.83rem;padding:.45rem;background:#fdecea;border-radius:var(--radius-sm);margin-bottom:.8rem"></div>
+    </div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeModal('apply-modal')">Cancel</button>
+      <button class="btn-save" onclick="confirmApply()">✔ Apply</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./advance.js"></script>
+</body>
+</html>

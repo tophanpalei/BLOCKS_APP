@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./orders.css">
+</head>
+<body>
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text">
+        <div>BuildMate</div>
+        <div class="logo-sub">Admin Panel</div>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html" class="active"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text);display:none" id="sidebar-toggle">☰</button>
+        <div class="admin-topbar-title">📦 Order Management</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button onclick="exportOrdersCSV()" style="padding:0.45rem 1rem;background:var(--success,#27ae60);color:white;border:none;border-radius:8px;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:var(--font)">📥 Export CSV</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user">
+          <div class="topbar-avatar">A</div>
+          Admin
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <!-- Status Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="filterByStatus('all', this)">📦 All Orders</button>
+        <button class="admin-tab" onclick="filterByStatus('Pending', this)">⏳ Pending</button>
+        <button class="admin-tab" onclick="filterByStatus('Confirmed', this)">✅ Confirmed</button>
+        <button class="admin-tab" onclick="filterByStatus('Delivered', this)">🚚 Delivered</button>
+        <button class="admin-tab" onclick="filterByStatus('Cancelled', this)">❌ Cancelled</button>
+        <button onclick="deleteAllCancelled()" style="margin-left:auto;padding:0.45rem 1rem;background:#e74c3c;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:var(--font)" title="Permanently delete all cancelled orders">🗑️ Delete All Cancelled</button>
+      </div>
+
+      <div class="admin-table-card">
+        <div class="admin-table-header">
+          <h3>All Orders</h3>
+        </div>
+
+        <!-- Global Filter Bar -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.7rem;padding:1rem 1.2rem;border-bottom:1px solid var(--border);background:var(--bg)">
+          <div style="position:relative">
+            <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:0.3rem">Order ID</div>
+            <input type="text" id="filter-order-id" placeholder="e.g. BM10001"
+              oninput="applyFilters()"
+              style="width:100%;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text);font-size:0.85rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:0.3rem">Customer</div>
+            <input type="text" id="filter-customer" placeholder="Name or phone"
+              oninput="applyFilters()"
+              style="width:100%;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text);font-size:0.85rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:0.3rem">Date</div>
+            <input type="date" id="filter-date"
+              onchange="applyFilters()"
+              style="width:100%;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text);font-size:0.85rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:0.3rem">Status</div>
+            <select id="filter-status" onchange="applyFilters()"
+              style="width:100%;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text);font-size:0.85rem;font-family:var(--font);box-sizing:border-box">
+              <option value="">All Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:0.3rem">Payment</div>
+            <select id="filter-payment" onchange="applyFilters()"
+              style="width:100%;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text);font-size:0.85rem;font-family:var(--font);box-sizing:border-box">
+              <option value="">All Payments</option>
+              <option value="UPI">UPI</option>
+              <option value="Cash on Delivery">Cash on Delivery</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:flex-end">
+            <button onclick="clearFilters()"
+              style="width:100%;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--card-bg);color:var(--text-muted);font-size:0.85rem;font-weight:600;font-family:var(--font);cursor:pointer">
+              ✕ Clear All
+            </button>
+          </div>
+        </div>
+
+        <!-- Bulk Action Bar -->
+        <div id="bulk-action-bar" style="display:none;padding:0.8rem 1.2rem;background:#e8f4fd;border-top:1px solid var(--border);align-items:center;gap:0.8rem;flex-wrap:wrap">
+          <span id="bulk-count" style="font-size:0.88rem;font-weight:700;color:var(--text)">0 selected</span>
+          <select id="bulk-status-select" style="padding:0.45rem 0.8rem;border:1.5px solid var(--border);border-radius:8px;font-size:0.85rem;font-family:var(--font);background:var(--card-bg);color:var(--text)">
+            <option value="">Change status to...</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+          <button onclick="doBulkUpdate()" style="padding:0.45rem 1rem;background:#e65c00;color:white;border:none;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:var(--font)">✓ Apply</button>
+          <button onclick="deleteSelectedOrders()" style="padding:0.45rem 1rem;background:#e74c3c;color:white;border:none;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:var(--font)" title="Delete selected cancelled orders">🗑️ Delete Selected</button>
+          <button onclick="clearBulkSelection()" style="padding:0.45rem 1rem;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:0.85rem;cursor:pointer;color:var(--text-muted);font-family:var(--font)">✕ Clear</button>
+        </div>
+
+        <div id="admin-orders-table" style="overflow-x:auto">
+          <!-- Populated by admin.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<!-- BULK WHATSAPP NOTIFY MODAL -->
+<div class="admin-modal-overlay" id="bulk-notify-overlay">
+  <div class="admin-modal" style="max-width:520px;width:96%;max-height:88vh;display:flex;flex-direction:column">
+    <div class="admin-modal-header">
+      <h3>📲 Notify Customers on WhatsApp</h3>
+      <button class="modal-close" onclick="closeBulkNotify()">✕</button>
+    </div>
+    <div class="admin-modal-body" style="overflow-y:auto;padding:1rem 1.5rem;flex:1">
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem">
+        Tap each button to open WhatsApp with a pre-filled message for that customer.
+      </p>
+      <div id="bulk-notify-list"></div>
+    </div>
+    <div class="admin-modal-footer" style="display:flex;justify-content:flex-end;padding:1rem 1.5rem;border-top:1px solid var(--border)">
+      <button class="btn-cancel" onclick="closeBulkNotify()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT ORDER MODAL -->
+<div class="admin-modal-overlay" id="order-edit-overlay">
+  <div class="admin-modal" style="max-width:700px;width:96%;max-height:90vh;display:flex;flex-direction:column">
+    <div class="admin-modal-header">
+      <h3>✏️ Edit Order <span id="oe-id-title" style="color:var(--primary)"></span></h3>
+      <button class="modal-close" onclick="closeOrderEdit()">✕</button>
+    </div>
+    <div class="admin-modal-body" style="overflow-y:auto;padding:1.2rem 1.5rem;flex:1">
+
+      <!-- Customer Details -->
+      <div style="margin-bottom:1.2rem">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:0.8rem">👤 Customer Details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem">
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted)">Name</label>
+            <input id="oe-name" type="text" style="width:100%;margin-top:0.2rem;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.88rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted)">Phone</label>
+            <input id="oe-phone" type="text" style="width:100%;margin-top:0.2rem;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.88rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted)">Address</label>
+            <input id="oe-address" type="text" style="width:100%;margin-top:0.2rem;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.88rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted)">Village / Area</label>
+            <input id="oe-village" type="text" style="width:100%;margin-top:0.2rem;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.88rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted)">District</label>
+            <input id="oe-district" type="text" style="width:100%;margin-top:0.2rem;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.88rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted)">PIN Code</label>
+            <input id="oe-pin" type="text" style="width:100%;margin-top:0.2rem;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.88rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted)">Payment Method</label>
+            <select id="oe-payment" style="width:100%;margin-top:0.2rem;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.88rem;font-family:var(--font);box-sizing:border-box">
+              <option value="Cash on Delivery">Cash on Delivery</option>
+              <option value="UPI">UPI</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-muted)">Order Date</label>
+            <input id="oe-date" type="datetime-local" style="width:100%;margin-top:0.2rem;padding:0.5rem 0.75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:0.88rem;font-family:var(--font);box-sizing:border-box">
+          </div>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div style="margin-bottom:1.2rem">
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:0.8rem">🛒 Items</div>
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem">
+          <thead>
+            <tr style="background:var(--bg);border-bottom:2px solid var(--border)">
+              <th style="padding:0.4rem 0.5rem;text-align:left;font-weight:700;color:var(--text-muted)">Product Name</th>
+              <th style="padding:0.4rem 0.5rem;text-align:center;width:70px;font-weight:700;color:var(--text-muted)">Qty</th>
+              <th style="padding:0.4rem 0.5rem;text-align:center;width:90px;font-weight:700;color:var(--text-muted)">Unit ₹</th>
+              <th style="padding:0.4rem 0.5rem;text-align:center;width:90px;font-weight:700;color:var(--text-muted)">Total ₹</th>
+              <th style="width:32px"></th>
+            </tr>
+          </thead>
+          <tbody id="oe-items-body"></tbody>
+        </table>
+        <button type="button" onclick="addOrderEditItem()"
+          style="margin-top:0.7rem;padding:0.4rem 1rem;border:1.5px dashed var(--border);border-radius:8px;background:var(--bg);color:var(--primary);font-size:0.83rem;cursor:pointer;font-family:var(--font);font-weight:600">
+          + Add Item
+        </button>
+      </div>
+
+      <!-- Summary -->
+      <div style="background:var(--bg);border-radius:8px;padding:1rem;border:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-size:0.88rem">
+          <span style="color:var(--text-muted)">Subtotal</span>
+          <strong id="oe-subtotal-display">₹0</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;font-size:0.88rem">
+          <span style="color:var(--text-muted)">Delivery Charge</span>
+          <input id="oe-delivery" type="number" min="0" value="0" oninput="recalcOrderEdit()"
+            style="width:90px;padding:0.3rem 0.5rem;border:1.5px solid var(--border);border-radius:6px;text-align:right;font-size:0.88rem;background:var(--bg);color:var(--text);font-family:var(--font)">
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;font-size:0.88rem">
+          <span style="color:var(--text-muted)">👷 Labour Charge</span>
+          <input id="oe-labour" type="number" min="0" value="0" oninput="recalcOrderEdit()"
+            style="width:90px;padding:0.3rem 0.5rem;border:1.5px solid var(--border);border-radius:6px;text-align:right;font-size:0.88rem;background:var(--bg);color:var(--text);font-family:var(--font)">
+        </div>
+        <div style="display:flex;justify-content:space-between;padding-top:0.5rem;border-top:1px solid var(--border);font-size:1rem;font-weight:700">
+          <span>Grand Total</span>
+          <span id="oe-total-display" style="color:var(--primary)">₹0</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="admin-modal-footer" style="display:flex;justify-content:flex-end;gap:0.8rem;padding:1rem 1.5rem;border-top:1px solid var(--border)">
+      <button class="btn-cancel" onclick="closeOrderEdit()">Cancel</button>
+      <button class="btn-save" onclick="saveOrderEdit()">💾 Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./orders.js"></script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Management — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./attendance-admin.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text"><div>BuildMate</div><div class="logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html" class="active"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer"><a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a></div>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">📋 Attendance Management</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-daily-btn"    onclick="switchTab('daily')">📅 Daily</button>
+        <button class="tab-btn"        id="tab-empwise-btn"  onclick="switchTab('empwise')">👤 Employee-wise</button>
+        <button class="tab-btn"        id="tab-deptwise-btn" onclick="switchTab('deptwise')">🏢 Dept-wise</button>
+        <button class="tab-btn"        id="tab-monthly-btn"  onclick="switchTab('monthly')">📊 Monthly Summary</button>
+        <button class="tab-btn"        id="tab-correct-btn"  onclick="switchTab('correct')">🔧 Corrections</button>
+      </div>
+
+      <!-- ── DAILY ── -->
+      <div id="tab-daily" class="tab-panel active">
+        <div class="admin-table-card">
+          <div class="filter-bar">
+            <div>
+              <label>Date</label>
+              <input type="date" id="daily-date" onchange="renderDaily()">
+            </div>
+            <div>
+              <label>Department</label>
+              <select id="daily-dept" onchange="renderDaily()">
+                <option value="">All Departments</option>
+              </select>
+            </div>
+            <div>
+              <label>Status</label>
+              <select id="daily-status-filter" onchange="renderDaily()">
+                <option value="">All</option>
+                <option value="present">Present</option>
+                <option value="absent">Absent</option>
+                <option value="half-day">Half Day</option>
+                <option value="paid-leave">Paid Leave</option>
+                <option value="unpaid-leave">Unpaid Leave</option>
+                <option value="sick-leave">Sick Leave</option>
+                <option value="holiday">Holiday</option>
+                <option value="weekly-off">Weekly Off</option>
+                <option value="on-duty">On Duty</option>
+              </select>
+            </div>
+            <button class="btn-primary" style="padding:.4rem .9rem;font-size:.83rem;align-self:flex-end" onclick="markAllAbsent()">Mark Remaining Absent</button>
+          </div>
+          <div id="daily-summary" class="summary-strip"></div>
+          <div class="tbl-wrap">
+            <table class="att-table">
+              <thead>
+                <tr>
+                  <th>Employee</th><th>Department</th><th>Shift</th>
+                  <th>Check-In</th><th>Check-Out</th><th>Hours</th>
+                  <th>Late</th><th>Early Leave</th><th>Status</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="daily-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── EMPLOYEE-WISE ── -->
+      <div id="tab-empwise" class="tab-panel">
+        <div class="admin-table-card">
+          <div class="filter-bar">
+            <div>
+              <label>Employee</label>
+              <select id="ew-emp" onchange="renderEmpwise()">
+                <option value="">Select Employee</option>
+              </select>
+            </div>
+            <div>
+              <label>Month</label>
+              <select id="ew-month"></select>
+            </div>
+            <div>
+              <label>Year</label>
+              <select id="ew-year"></select>
+            </div>
+            <button class="btn-primary" style="padding:.4rem .9rem;font-size:.83rem;align-self:flex-end" onclick="renderEmpwise()">View</button>
+          </div>
+          <div id="ew-summary" class="summary-strip" style="display:none"></div>
+          <div id="ew-calendar" style="padding:.5rem"></div>
+          <div class="tbl-wrap">
+            <table class="att-table">
+              <thead>
+                <tr><th>Date</th><th>Day</th><th>Check-In</th><th>Check-Out</th><th>Hours</th><th>Late</th><th>Early Leave</th><th>Status</th><th>Action</th></tr>
+              </thead>
+              <tbody id="ew-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DEPT-WISE ── -->
+      <div id="tab-deptwise" class="tab-panel">
+        <div class="admin-table-card">
+          <div class="filter-bar">
+            <div>
+              <label>Department</label>
+              <select id="dw-dept" onchange="renderDeptwise()">
+                <option value="">All Departments</option>
+              </select>
+            </div>
+            <div>
+              <label>Month</label>
+              <select id="dw-month"></select>
+            </div>
+            <div>
+              <label>Year</label>
+              <select id="dw-year"></select>
+            </div>
+            <button class="btn-primary" style="padding:.4rem .9rem;font-size:.83rem;align-self:flex-end" onclick="renderDeptwise()">View</button>
+          </div>
+          <div class="tbl-wrap">
+            <table class="att-table">
+              <thead>
+                <tr><th>Employee</th><th>Dept</th><th>Present</th><th>Absent</th><th>Half Day</th><th>Leaves</th><th>Holiday/WO</th><th>Total Hrs</th><th>Late Days</th></tr>
+              </thead>
+              <tbody id="dw-body"><tr><td colspan="9" class="no-row">Select department and month</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MONTHLY SUMMARY ── -->
+      <div id="tab-monthly" class="tab-panel">
+        <div class="admin-table-card">
+          <div class="filter-bar">
+            <div>
+              <label>Month</label>
+              <select id="ms-month"></select>
+            </div>
+            <div>
+              <label>Year</label>
+              <select id="ms-year"></select>
+            </div>
+            <button class="btn-primary" style="padding:.4rem .9rem;font-size:.83rem;align-self:flex-end" onclick="renderMonthlySummary()">Generate</button>
+          </div>
+          <div class="tbl-wrap">
+            <table class="att-table">
+              <thead>
+                <tr>
+                  <th>Employee</th><th>Dept</th>
+                  <th style="color:#27ae60">P</th><th style="color:#e74c3c">A</th>
+                  <th style="color:#e65c00">H</th><th style="color:#1a73e8">PL</th>
+                  <th style="color:#7b1fa2">UL</th><th style="color:#f9a825">SL</th>
+                  <th style="color:#00838f">Hol</th><th style="color:#757575">WO</th>
+                  <th style="color:#3949ab">OD</th>
+                  <th>Hrs</th><th>OT Hrs</th><th>Late</th>
+                </tr>
+              </thead>
+              <tbody id="ms-body"><tr><td colspan="14" class="no-row">Select month and click Generate</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CORRECTIONS ── -->
+      <div id="tab-correct" class="tab-panel">
+        <div class="admin-table-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.6rem">
+            <div style="font-size:.95rem;font-weight:700">Attendance Corrections &amp; Approvals</div>
+            <div style="display:flex;gap:.6rem">
+              <input type="text" id="corr-search" placeholder="Search employee…" oninput="renderCorrections()"
+                style="padding:.38rem .7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.83rem;background:var(--bg);color:var(--text);width:170px">
+              <select id="corr-filter" onchange="renderCorrections()"
+                style="padding:.38rem .7rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.83rem;background:var(--bg);color:var(--text)">
+                <option value="">All</option>
+                <option value="pending">Pending Approval</option>
+                <option value="approved">Approved</option>
+                <option value="corrected">Corrected</option>
+              </select>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="att-table">
+              <thead>
+                <tr><th>Date</th><th>Employee</th><th>Check-In</th><th>Check-Out</th><th>Status</th><th>Note</th><th>Approval</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="corr-body"><tr><td colspan="8" class="no-row">No corrections yet.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div>
+</div>
+
+<!-- ── CORRECTION / MARK MODAL ── -->
+<div id="att-modal" class="admin-modal-overlay">
+  <div class="admin-modal att-modal">
+    <div class="admin-modal-header" style="padding:1rem 1.3rem">
+      <h3 id="att-modal-title" style="margin:0;font-size:1rem">Edit Attendance</h3>
+      <button class="modal-close" onclick="closeAttModal()">✕</button>
+    </div>
+    <div style="padding:1.2rem 1.3rem">
+      <div style="font-size:.83rem;color:var(--text-muted);margin-bottom:1rem">
+        <strong id="am-emp-name" style="color:var(--text)"></strong> &nbsp;·&nbsp; <span id="am-date"></span>
+      </div>
+      <div class="form-grid-2" style="margin-bottom:.85rem">
+        <div class="form-group">
+          <label>Check-In Time</label>
+          <input type="time" id="am-in">
+        </div>
+        <div class="form-group">
+          <label>Check-Out Time</label>
+          <input type="time" id="am-out">
+        </div>
+        <div class="form-group span-2">
+          <label>Status</label>
+          <select id="am-status">
+            <option value="present">Present</option>
+            <option value="absent">Absent</option>
+            <option value="half-day">Half Day</option>
+            <option value="paid-leave">Paid Leave</option>
+            <option value="unpaid-leave">Unpaid Leave</option>
+            <option value="sick-leave">Sick Leave</option>
+            <option value="holiday">Holiday</option>
+            <option value="weekly-off">Weekly Off</option>
+            <option value="on-duty">On Duty</option>
+          </select>
+        </div>
+        <div class="form-group span-2">
+          <label>Correction Note</label>
+          <input type="text" id="am-note" placeholder="Reason for correction">
+        </div>
+        <div class="form-group">
+          <label>Approval</label>
+          <select id="am-approval">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+          </select>
+        </div>
+      </div>
+      <div id="att-modal-error" class="modal-error" style="margin:0 0 .5rem"></div>
+    </div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeAttModal()">Cancel</button>
+      <button class="btn-save" onclick="saveAttCorrection()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./attendance-admin.js"></script>
+</body>
+</html>

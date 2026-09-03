@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Portal — BuildMate</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./attendance.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="../store/index.html" class="nav-brand">
+    <div class="brand-icon">🧱</div>
+    <div>
+      <div>BuildMate</div>
+      <div style="font-size:0.65rem;font-weight:400;color:var(--text-muted);margin-top:-2px">Blocks & Bricks</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../store/index.html">Home</a></li>
+    <li><a href="../store/products.html">Products</a></li>
+    <li><a href="attendance.html">👷 Employee</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <a href="../store/cart.html" class="cart-btn">
+      🛒 Cart
+      <span class="cart-badge" style="display:none">0</span>
+    </a>
+  </div>
+</nav>
+
+<main style="padding:1.5rem 0 3rem">
+  <div class="emp-portal">
+
+    <!-- ── LOGIN SCREEN ── -->
+    <div id="emp-login-screen">
+      <div class="emp-login-card">
+        <div style="font-size:3rem">👷</div>
+        <h2>Employee Portal</h2>
+        <p class="subtitle">Enter your credentials to log in</p>
+
+        <div class="emp-form-group">
+          <label>Employee ID / PIN</label>
+          <div class="pin-wrap">
+            <input type="password" id="emp-pin" maxlength="12" placeholder="••••••••" autocomplete="off"
+              onkeydown="if(event.key==='Enter')employeeLogin()">
+            <button type="button" class="pin-eye" id="pin-eye-btn" onclick="togglePin()">👁</button>
+          </div>
+        </div>
+
+        <div id="emp-login-error" class="emp-login-error"></div>
+
+        <button class="btn-primary" onclick="employeeLogin()"
+          style="width:100%;padding:0.85rem;font-size:1rem;margin-top:0.5rem">Login →</button>
+      </div>
+    </div>
+
+    <!-- ── DASHBOARD ── -->
+    <div id="emp-dashboard" style="display:none">
+      <div class="emp-dash">
+
+        <div class="emp-header-bar">
+          <div>
+            <h3 id="emp-welcome-name">Welcome!</h3>
+            <div class="emp-role" id="emp-role-display"></div>
+          </div>
+          <button class="emp-logout-btn" onclick="employeeLogout()">Logout</button>
+        </div>
+
+        <div class="clock-card">
+          <div class="clock-date" id="emp-clock-date"></div>
+          <div class="clock-time" id="emp-clock-time">--:--:--</div>
+        </div>
+
+        <div class="punch-card">
+          <div class="punch-label" id="punch-status-label">Loading…</div>
+          <div class="punch-info"  id="punch-time-info"></div>
+          <button class="punch-btn" id="punch-btn" onclick="punchInOut()">⏳</button>
+          <button id="undo-punch-btn" onclick="undoPunchOut()"
+            style="display:none;margin-top:0.75rem;width:100%;padding:0.6rem;font-size:0.88rem;font-weight:600;
+                   background:none;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+                   cursor:pointer;color:var(--text-muted)">
+            ↩ Undo Punch Out
+          </button>
+        </div>
+
+        <div class="history-card">
+          <h4>📅 Recent Attendance</h4>
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Date</th><th>In</th><th>Out</th><th>Hours</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="att-history"></tbody>
+          </table>
+        </div>
+
+        <div class="leave-card">
+          <h4>🏖️ My Leaves <button class="lv-apply-btn" onclick="openApplyLeave()">+ Apply</button></h4>
+          <table class="leave-table">
+            <thead><tr><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th></tr></thead>
+            <tbody id="my-leave-body"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Apply Leave Modal -->
+<div class="lv-modal-overlay" id="apply-leave-modal">
+  <div class="lv-modal-box">
+    <h3>🏖️ Apply for Leave</h3>
+    <div class="lv-err" id="lv-err"></div>
+    <div class="lv-fg">
+      <label>Leave Type</label>
+      <select id="lv-type">
+        <option value="leave">Leave (Paid)</option>
+        <option value="sick-leave">Sick Leave</option>
+        <option value="unpaid-leave">Unpaid Leave</option>
+      </select>
+    </div>
+    <div class="lv-row">
+      <div class="lv-fg">
+        <label>From Date</label>
+        <input type="date" id="lv-from" onchange="calcLvDays()">
+      </div>
+      <div class="lv-fg">
+        <label>To Date</label>
+        <input type="date" id="lv-to" onchange="calcLvDays()">
+      </div>
+    </div>
+    <div class="lv-fg">
+      <label>Days: <span id="lv-days-label" style="color:var(--primary);font-weight:700">—</span></label>
+    </div>
+    <div class="lv-fg">
+      <label>Reason</label>
+      <input type="text" id="lv-reason" placeholder="e.g. Personal work, fever…">
+    </div>
+    <div class="lv-modal-footer">
+      <button onclick="closeApplyLeave()" style="padding:.5rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;font-size:.9rem">Cancel</button>
+      <button onclick="submitLeave()" style="padding:.5rem 1.2rem;border:none;border-radius:var(--radius-sm);background:var(--primary);color:#fff;cursor:pointer;font-size:.9rem;font-weight:700">Submit</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <div>© 2024 BuildMate. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="./attendance.js"></script>
+</body>
+</html>

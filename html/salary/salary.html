@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salary & Wages — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./salary.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text"><div>BuildMate</div><div class="logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html" class="active"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">💰</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer"><a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a></div>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">💵 Salary & Wages</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:0;border-bottom:2px solid var(--border);padding:0 1.2rem;background:var(--card)">
+        <button id="tab-payroll" onclick="switchTab('payroll')" style="padding:.7rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.88rem;font-weight:700;color:var(--primary);border-bottom:2px solid var(--primary);margin-bottom:-2px">💵 Payroll</button>
+        <button id="tab-ot" onclick="switchTab('ot')" style="padding:.7rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.88rem;font-weight:600;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px">⏱️ Overtime</button>
+      </div>
+
+      <!-- PAYROLL TAB -->
+      <div id="section-payroll" class="admin-table-card" style="border-top:none;border-radius:0 0 var(--radius) var(--radius)">
+
+        <!-- Filters -->
+        <div class="filter-bar">
+          <div>
+            <label>Month</label>
+            <select id="f-month">
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </div>
+          <div>
+            <label>Year</label>
+            <select id="f-year">
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+            </select>
+          </div>
+          <div>
+            <label>Department</label>
+            <select id="f-dept">
+              <option value="">All Departments</option>
+              <option>Production</option>
+              <option>Quality</option>
+              <option>Warehouse</option>
+              <option>Maintenance</option>
+              <option>Logistics</option>
+              <option>Sales</option>
+              <option>Accounts</option>
+              <option>HR/Admin</option>
+              <option>Security</option>
+              <option>Management</option>
+            </select>
+          </div>
+          <div>
+            <label>Type</label>
+            <select id="f-type">
+              <option value="">All</option>
+              <option value="monthly">Monthly</option>
+              <option value="daily">Daily Wage</option>
+            </select>
+          </div>
+          <div>
+            <button class="btn-calc" onclick="calculate()">Calculate →</button>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-strip" id="summary-strip"></div>
+
+        <!-- Table -->
+        <div class="tbl-wrap">
+          <table class="sal-table">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Type</th>
+                <th class="num">Present</th>
+                <th class="num">½ Day</th>
+                <th class="num">Leaves</th>
+                <th class="num">Absent</th>
+                <th class="num">WO+Hol</th>
+                <th class="num">Paid Days</th>
+                <th class="amt">Rate</th>
+                <th class="amt">Salary</th>
+                <th class="amt">Net Pay</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="sal-body">
+              <tr><td colspan="12" class="no-row">Select month and click <strong>Calculate</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /section-payroll -->
+
+      <!-- OVERTIME TAB -->
+      <div id="section-ot" class="admin-table-card" style="display:none;border-top:none;border-radius:0 0 var(--radius) var(--radius)">
+
+        <div class="filter-bar">
+          <div>
+            <label>Month</label>
+            <select id="ot-month">
+              <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+              <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+              <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+              <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+            </select>
+          </div>
+          <div>
+            <label>Year</label>
+            <select id="ot-year">
+              <option value="2024">2024</option><option value="2025">2025</option>
+              <option value="2026">2026</option><option value="2027">2027</option>
+            </select>
+          </div>
+          <div>
+            <label>Employee</label>
+            <select id="ot-f-emp" onchange="renderOT()">
+              <option value="">All Employees</option>
+            </select>
+          </div>
+          <div style="margin-left:auto">
+            <button class="btn-calc" onclick="openAddOT()">+ Add OT Entry</button>
+          </div>
+        </div>
+
+        <div class="summary-strip" id="ot-summary-strip"></div>
+
+        <div class="tbl-wrap">
+          <table class="sal-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Employee</th>
+                <th class="num">OT Hours</th>
+                <th class="amt">Rate/Hr</th>
+                <th class="amt">OT Amount</th>
+                <th>Note</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="ot-body">
+              <tr><td colspan="7" class="no-row">No overtime entries yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- /section-ot -->
+
+    </div>
+  </div>
+</div>
+
+<!-- Payslip Modal -->
+<div id="payslip-modal" class="admin-modal-overlay">
+  <div class="admin-modal" style="max-width:460px;width:96%;padding:0;overflow:hidden">
+    <div id="payslip-content" class="payslip"></div>
+    <div class="modal-footer-bar">
+      <button class="print-btn" onclick="printPayslip()">🖨️ Print</button>
+      <button class="btn-cancel" onclick="document.getElementById('payslip-modal').classList.remove('active')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- OT Modal -->
+<div id="ot-modal" class="admin-modal-overlay">
+  <div class="admin-modal" style="max-width:400px;width:96%;padding:0">
+    <div class="admin-modal-header" style="padding:1rem 1.3rem">
+      <h3 id="ot-modal-title" style="margin:0;font-size:1rem">Add OT Entry</h3>
+      <button class="modal-close" onclick="closeOTModal()">✕</button>
+    </div>
+    <div style="padding:1.2rem 1.3rem">
+      <div style="display:flex;flex-direction:column;gap:.28rem;margin-bottom:.85rem">
+        <label style="font-size:.78rem;font-weight:600;color:var(--text-muted)">Employee *</label>
+        <select id="ot-emp" style="padding:.58rem .85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;background:var(--bg);color:var(--text)"></select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.85rem">
+        <div style="display:flex;flex-direction:column;gap:.28rem">
+          <label style="font-size:.78rem;font-weight:600;color:var(--text-muted)">Date *</label>
+          <input type="date" id="ot-date" style="padding:.58rem .85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;background:var(--bg);color:var(--text)">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.28rem">
+          <label style="font-size:.78rem;font-weight:600;color:var(--text-muted)">OT Hours *</label>
+          <input type="number" id="ot-hours" min="0.5" step="0.5" placeholder="e.g. 2" oninput="calcOTAmount()" style="padding:.58rem .85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;background:var(--bg);color:var(--text)">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.28rem">
+          <label style="font-size:.78rem;font-weight:600;color:var(--text-muted)">Rate / Hour (₹) *</label>
+          <input type="number" id="ot-rate" min="1" placeholder="e.g. 100" oninput="calcOTAmount()" style="padding:.58rem .85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;background:var(--bg);color:var(--text)">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.28rem">
+          <label style="font-size:.78rem;font-weight:600;color:var(--text-muted)">OT Amount</label>
+          <input type="text" id="ot-amount-display" readonly style="padding:.58rem .85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;background:var(--bg);color:var(--primary);font-weight:800" value="₹ —">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.28rem;grid-column:span 2">
+          <label style="font-size:.78rem;font-weight:600;color:var(--text-muted)">Note</label>
+          <input type="text" id="ot-note" placeholder="e.g. Machine repair, urgent dispatch…" style="padding:.58rem .85rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.88rem;background:var(--bg);color:var(--text)">
+        </div>
+      </div>
+      <div id="ot-error" style="display:none;color:#c0392b;font-size:.83rem;padding:.45rem;background:#fdecea;border-radius:var(--radius-sm);margin-top:.7rem"></div>
+    </div>
+    <div class="modal-footer-bar">
+      <button class="btn-cancel" onclick="closeOTModal()">Cancel</button>
+      <button class="btn-save" onclick="saveOTEntry()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./salary.js"></script>
+</body>
+</html>

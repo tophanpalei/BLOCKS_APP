@@ -1,0 +1,49 @@
+/* Summary cards */
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.summary-card { background: var(--card); border-radius: var(--radius); padding: 1.1rem 1.3rem; box-shadow: var(--shadow); }
+.summary-card .s-label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem; }
+.summary-card .s-value { font-size: 1.5rem; font-weight: 800; color: var(--text); line-height: 1; }
+.summary-card .s-sub   { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+.summary-card.primary .s-value { color: var(--primary); }
+.summary-card.danger  .s-value { color: #e74c3c; }
+.summary-card.success .s-value { color: #27ae60; }
+
+/* Filters */
+.filter-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1.2rem; }
+.filter-row > div { display: flex; flex-direction: column; gap: 0.25rem; }
+.filter-row label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+.filter-row select, .filter-row input { padding: 0.5rem 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 0.88rem; }
+.filter-row input { min-width: 180px; }
+
+/* Table */
+.exp-table-wrap { overflow-x: auto; }
+.exp-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.exp-table th { background: var(--bg); padding: 0.65rem 0.8rem; text-align: left; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid var(--border); white-space: nowrap; }
+.exp-table td { padding: 0.7rem 0.8rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.exp-table tr:last-child td { border-bottom: none; }
+.exp-table tr:hover td { background: var(--bg); }
+.exp-table tr.total-row td { font-weight: 700; background: var(--bg); border-top: 2px solid var(--border); }
+.amount-cell { font-weight: 700; color: var(--primary); }
+.badge-paid    { background: #e8f8ee; color: #27ae60; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+.badge-pending { background: #fff3e0; color: #e65c00; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+.badge-credit  { background: #fdecea; color: #e74c3c; padding: 0.15rem 0.55rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+.action-btns { display: flex; gap: 0.4rem; }
+.btn-icon { padding: 0.3rem 0.6rem; border-radius: var(--radius-sm); border: 1.5px solid var(--border); background: var(--bg); cursor: pointer; font-size: 0.85rem; }
+.btn-icon:hover { background: var(--card); }
+.btn-icon.danger:hover { background: #fdecea; border-color: #e74c3c; }
+.no-exp { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 0.9rem; }
+
+/* Modal — .admin-modal-overlay and .admin-modal base styles come from style.css (z-index:9999) */
+.admin-modal { padding: 1.8rem; }
+.admin-modal h3 { margin: 0 0 1.5rem; font-size: 1.1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.3rem; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem 0.85rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 0.9rem; background: var(--bg); color: var(--text); box-sizing: border-box; font-family: inherit; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+.form-group textarea { resize: vertical; min-height: 60px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; }
+.total-preview { background: var(--bg); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border: 1.5px solid var(--border); }
+.total-preview span { font-size: 0.85rem; color: var(--text-muted); }
+.total-preview strong { font-size: 1.1rem; color: var(--primary); }

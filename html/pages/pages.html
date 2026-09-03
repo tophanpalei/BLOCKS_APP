@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Pages — BuildMate</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    body { background: var(--bg); }
+    .page-wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    .page-header { text-align: center; margin-bottom: 2.5rem; }
+    .page-header h1 { font-size: 1.8rem; font-weight: 800; margin: 0 0 .3rem; }
+    .page-header p  { color: var(--text-muted); font-size: .92rem; margin: 0; }
+
+    .section-title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin: 0 0 .75rem; padding-bottom: .35rem; border-bottom: 2px solid var(--border); }
+    .pages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .75rem; margin-bottom: 2rem; }
+
+    .page-card { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; text-decoration: none; color: var(--text); transition: box-shadow .15s, border-color .15s; display: flex; align-items: flex-start; gap: .75rem; }
+    .page-card:hover { box-shadow: var(--shadow-md); border-color: var(--primary); text-decoration: none; }
+    .page-icon { font-size: 1.5rem; line-height: 1; flex-shrink: 0; }
+    .page-name { font-weight: 700; font-size: .9rem; margin-bottom: .15rem; }
+    .page-desc { font-size: .74rem; color: var(--text-muted); line-height: 1.4; }
+
+    .badge-store { display:inline-block; background:#e8f0fe; color:#1a73e8; font-size:.66rem; font-weight:700; padding:.1rem .4rem; border-radius:999px; margin-left:.4rem; vertical-align:middle; }
+    .badge-admin { display:inline-block; background:#fce4ec; color:#c2185b; font-size:.66rem; font-weight:700; padding:.1rem .4rem; border-radius:999px; margin-left:.4rem; vertical-align:middle; }
+    .badge-emp   { display:inline-block; background:#e8f8ee; color:#27ae60; font-size:.66rem; font-weight:700; padding:.1rem .4rem; border-radius:999px; margin-left:.4rem; vertical-align:middle; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="store/index.html" class="nav-brand">
+    <div class="brand-icon">🧱</div>
+    <div>
+      <div>BuildMate</div>
+      <div style="font-size:.65rem;font-weight:400;color:var(--text-muted);margin-top:-2px">Blocks & Bricks</div>
+    </div>
+  </a>
+  <div class="nav-actions">
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+  </div>
+</nav>
+
+<main style="padding: 1.5rem 0 3rem">
+  <div class="page-wrap">
+
+    <div class="page-header">
+      <h1>🧱 BuildMate — All Pages</h1>
+      <p>Quick access to every page in the application</p>
+    </div>
+
+    <!-- Store / Customer Pages -->
+    <div class="section-title">🛒 Store / Customer Pages <span class="badge-store">Public</span></div>
+    <div class="pages-grid">
+      <a href="store/index.html" class="page-card">
+        <div class="page-icon">🏠</div>
+        <div><div class="page-name">Home / Store</div><div class="page-desc">Product listing, search and add to cart</div></div>
+      </a>
+      <a href="store/products.html" class="page-card">
+        <div class="page-icon">🧱</div>
+        <div><div class="page-name">Products</div><div class="page-desc">Browse all blocks & bricks products</div></div>
+      </a>
+      <a href="store/cart.html" class="page-card">
+        <div class="page-icon">🛒</div>
+        <div><div class="page-name">Cart</div><div class="page-desc">View cart and proceed to checkout</div></div>
+      </a>
+      <a href="store/checkout.html" class="page-card">
+        <div class="page-icon">💳</div>
+        <div><div class="page-name">Checkout</div><div class="page-desc">Enter delivery details and place order</div></div>
+      </a>
+      <a href="store/order-success.html" class="page-card">
+        <div class="page-icon">✅</div>
+        <div><div class="page-name">Order Success</div><div class="page-desc">Order confirmation and summary</div></div>
+      </a>
+      <a href="store/track-order.html" class="page-card">
+        <div class="page-icon">📍</div>
+        <div><div class="page-name">Track Order</div><div class="page-desc">Look up order status by ID</div></div>
+      </a>
+    </div>
+
+    <!-- Employee Portal -->
+    <div class="section-title">👷 Employee Portal <span class="badge-emp">Employees</span></div>
+    <div class="pages-grid">
+      <a href="portal/attendance.html" class="page-card">
+        <div class="page-icon">👷</div>
+        <div><div class="page-name">Employee Portal</div><div class="page-desc">Punch in/out, attendance history, apply leave</div></div>
+      </a>
+    </div>
+
+    <!-- Admin Login -->
+    <div class="section-title">🔐 Admin Access</div>
+    <div class="pages-grid">
+      <a href="admin.html" class="page-card">
+        <div class="page-icon">🔐</div>
+        <div><div class="page-name">Admin Login</div><div class="page-desc">Sign in to the admin panel</div></div>
+      </a>
+    </div>
+
+    <!-- Admin — Store -->
+    <div class="section-title">📦 Admin — Store Management <span class="badge-admin">Admin</span></div>
+    <div class="pages-grid">
+      <a href="admin/dashboard.html" class="page-card">
+        <div class="page-icon">📊</div>
+        <div><div class="page-name">Dashboard</div><div class="page-desc">Sales overview, stats and quick actions</div></div>
+      </a>
+      <a href="admin/orders.html" class="page-card">
+        <div class="page-icon">📦</div>
+        <div><div class="page-name">Orders</div><div class="page-desc">Manage and fulfil customer orders</div></div>
+      </a>
+      <a href="admin/products-admin.html" class="page-card">
+        <div class="page-icon">🧱</div>
+        <div><div class="page-name">Products</div><div class="page-desc">Add, edit and manage product catalogue</div></div>
+      </a>
+      <a href="admin/customers.html" class="page-card">
+        <div class="page-icon">👥</div>
+        <div><div class="page-name">Customers</div><div class="page-desc">Customer list and order history</div></div>
+      </a>
+      <a href="admin/reports.html" class="page-card">
+        <div class="page-icon">📈</div>
+        <div><div class="page-name">Reports</div><div class="page-desc">Sales reports and analytics</div></div>
+      </a>
+      <a href="admin/expenses.html" class="page-card">
+        <div class="page-icon">🏦</div>
+        <div><div class="page-name">Expenses</div><div class="page-desc">Track and manage business expenses</div></div>
+      </a>
+      <a href="admin/settings.html" class="page-card">
+        <div class="page-icon">⚙️</div>
+        <div><div class="page-name">Settings</div><div class="page-desc">Store config, admin credentials</div></div>
+      </a>
+    </div>
+
+    <!-- Admin — HR / Factory -->
+    <div class="section-title">🏭 Admin — HR & Factory <span class="badge-admin">Admin</span></div>
+    <div class="pages-grid">
+      <a href="employees/employees.html" class="page-card">
+        <div class="page-icon">👷</div>
+        <div><div class="page-name">Employees</div><div class="page-desc">Employee master, departments, salary config</div></div>
+      </a>
+      <a href="shifts/shifts.html" class="page-card">
+        <div class="page-icon">🕐</div>
+        <div><div class="page-name">Shifts</div><div class="page-desc">Shift master, employee assignment, history</div></div>
+      </a>
+      <a href="attendance-admin/attendance-admin.html" class="page-card">
+        <div class="page-icon">📋</div>
+        <div><div class="page-name">Attendance</div><div class="page-desc">Daily, monthly, dept-wise attendance reports</div></div>
+      </a>
+      <a href="leave/leave.html" class="page-card">
+        <div class="page-icon">🏖️</div>
+        <div><div class="page-name">Leave</div><div class="page-desc">Approve / reject leave applications</div></div>
+      </a>
+      <a href="holiday/holiday.html" class="page-card">
+        <div class="page-icon">📅</div>
+        <div><div class="page-name">Holidays</div><div class="page-desc">Holiday calendar and weekly off config</div></div>
+      </a>
+      <a href="payroll/payroll.html" class="page-card">
+        <div class="page-icon">💰</div>
+        <div><div class="page-name">Payroll</div><div class="page-desc">Monthly payroll runs — approve & mark paid</div></div>
+      </a>
+      <a href="salary/salary.html" class="page-card">
+        <div class="page-icon">💵</div>
+        <div><div class="page-name">Salary & Wages</div><div class="page-desc">Monthly and daily wage calculation</div></div>
+      </a>
+      <a href="advance/advance.html" class="page-card">
+        <div class="page-icon">💳</div>
+        <div><div class="page-name">Advances</div><div class="page-desc">Advance, loan and deduction tracking</div></div>
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <div>© 2024 BuildMate. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+</body>
+</html>

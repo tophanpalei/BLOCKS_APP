@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Payroll — BuildMate Admin</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="./payroll.css">
+</head>
+<body>
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="admin-logo">
+      <div class="brand-icon">🧱</div>
+      <div class="logo-text"><div>BuildMate</div><div class="logo-sub">Admin Panel</div></div>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Main</div>
+        <a href="../dashboard/dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="../orders/orders.html"><span class="nav-icon">📦</span> Orders</a>
+        <a href="../products/products-admin.html"><span class="nav-icon">🧱</span> Products</a>
+        <a href="../customers/customers.html"><span class="nav-icon">👥</span> Customers</a>
+        <a href="../reports/reports.html"><span class="nav-icon">📈</span> Reports</a>
+        <a href="../employees/employees.html"><span class="nav-icon">👷</span> Employees</a>
+        <div class="sub-nav">
+          <a href="../shifts/shifts.html"><span class="nav-icon">🕐</span> Shifts</a>
+          <a href="../attendance-admin/attendance-admin.html"><span class="nav-icon">📋</span> Attendance</a>
+          <a href="../leave/leave.html"><span class="nav-icon">🏖️</span> Leave</a>
+          <a href="../holiday/holiday.html"><span class="nav-icon">📅</span> Holidays</a>
+          <a href="../payroll/payroll.html" class="active"><span class="nav-icon">💰</span> Payroll</a>
+          <a href="../salary/salary.html"><span class="nav-icon">💵</span> Salary</a>
+          <a href="../advance/advance.html"><span class="nav-icon">💳</span> Advances</a>
+        </div>
+        <a href="../expenses/expenses.html"><span class="nav-icon">🏦</span> Expenses</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-label">Store</div>
+        <a href="../settings/settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+        <a href="../store/index.html" target="_blank"><span class="nav-icon">🌐</span> View Store</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer"><a href="#" class="admin-logout"><span class="nav-icon">🚪</span> Logout</a></div>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <button onclick="toggleAdminSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--text)">☰</button>
+        <div class="admin-topbar-title">💰 Monthly Payroll</div>
+      </div>
+      <div class="admin-topbar-actions">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="topbar-user"><div class="topbar-avatar">A</div>Admin</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- ── VIEW A: Runs List ─────────────────────────────────────── -->
+      <div id="view-list">
+
+        <!-- Run selector -->
+        <div class="filter-bar">
+          <div>
+            <label>Month</label>
+            <select id="run-month">
+              <option value="1">January</option><option value="2">February</option>
+              <option value="3">March</option><option value="4">April</option>
+              <option value="5">May</option><option value="6">June</option>
+              <option value="7">July</option><option value="8">August</option>
+              <option value="9" selected>September</option><option value="10">October</option>
+              <option value="11">November</option><option value="12">December</option>
+            </select>
+          </div>
+          <div>
+            <label>Year</label>
+            <select id="run-year">
+              <option value="2024">2024</option><option value="2025">2025</option>
+              <option value="2026" selected>2026</option><option value="2027">2027</option>
+            </select>
+          </div>
+          <div style="padding-bottom:.05rem">
+            <label>&nbsp;</label>
+            <button class="btn-run" onclick="runPayroll()">▶ Run Payroll</button>
+          </div>
+          <div id="run-warning" style="display:none;font-size:.82rem;color:#e65100;background:#fff3e0;padding:.45rem .9rem;border-radius:var(--radius-sm);align-self:center"></div>
+        </div>
+
+        <!-- Past runs table -->
+        <div class="admin-table-card" style="border-top:none;border-radius:0 0 var(--radius) var(--radius)">
+          <div class="tbl-wrap">
+            <table class="run-table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Employees</th>
+                  <th style="text-align:right">Total Gross</th>
+                  <th style="text-align:right">Total Deductions</th>
+                  <th style="text-align:right">Total Net</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="runs-body">
+                <tr><td colspan="8" class="no-row">No payroll runs yet. Select a month and click <strong>Run Payroll</strong>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIEW B: Run Detail ────────────────────────────────────── -->
+      <div id="view-detail" style="display:none">
+
+        <div class="admin-table-card" style="padding:0;overflow:hidden">
+          <!-- Header -->
+          <div class="detail-header">
+            <button class="back-btn" onclick="backToList()">← Back</button>
+            <h2 id="detail-title">September 2026 Payroll</h2>
+            <span id="detail-status-badge"></span>
+            <div style="flex:1"></div>
+            <button id="btn-print-all" onclick="printAllSlips()" style="padding:.38rem .9rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.83rem;cursor:pointer;background:var(--bg)">🖨️ Print All Slips</button>
+          </div>
+
+          <!-- Summary chips -->
+          <div style="padding:1rem 1.4rem;border-bottom:1px solid var(--border)">
+            <div class="summary-row" style="margin-bottom:0">
+              <div class="sc"><div class="sv" id="d-emp">0</div><div class="sl">Employees</div></div>
+              <div class="sc"><div class="sv" id="d-gross">₹0</div><div class="sl">Total Gross</div></div>
+              <div class="sc"><div class="sv" id="d-ded" style="color:#e74c3c">₹0</div><div class="sl">Total Deductions</div></div>
+              <div class="sc"><div class="sv" id="d-net" style="color:#2e7d32">₹0</div><div class="sl">Net Payable</div></div>
+            </div>
+          </div>
+
+          <!-- Employee table -->
+          <div class="tbl-wrap">
+            <table class="pr-table">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th class="amt">Basic Salary</th>
+                  <th class="amt">Overtime</th>
+                  <th class="amt">+ Allowance</th>
+                  <th class="amt" style="color:#1a73e8">Gross</th>
+                  <th class="amt">Advance Ded.</th>
+                  <th class="amt">– Deduction</th>
+                  <th class="amt" style="color:#2e7d32">Net Salary</th>
+                  <th class="ctr">Slip</th>
+                </tr>
+              </thead>
+              <tbody id="detail-body"></tbody>
+              <tfoot id="detail-foot"></tfoot>
+            </table>
+          </div>
+
+          <!-- Action bar -->
+          <div class="action-bar">
+            <div class="totals-text" id="action-bar-info"></div>
+            <span id="paid-stamp" class="paid-stamp" style="display:none">✓ PAID</span>
+            <button id="btn-approve" onclick="approvePayroll()" style="display:none;padding:.5rem 1.4rem;background:#1a73e8;color:#fff;border:none;border-radius:var(--radius-sm);font-size:.88rem;font-weight:700;cursor:pointer">✓ Approve Payroll</button>
+            <button id="btn-markpaid" onclick="markPaid()" style="display:none;padding:.5rem 1.4rem;background:#27ae60;color:#fff;border:none;border-radius:var(--radius-sm);font-size:.88rem;font-weight:700;cursor:pointer">💸 Mark as Paid</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+<script src="../../js/config.js"></script>
+<script src="../../js/app.js"></script>
+<script src="../admin/admin.js"></script>
+<script src="./payroll.js"></script>
+</body>
+</html>
