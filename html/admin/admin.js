@@ -1005,7 +1005,23 @@ window.bulkUpdateStatusAdmin = function (ids, newStatus) {
 
 // ── SIDEBAR TOGGLE (mobile) ────────────────────────────────────────────────
 window.toggleAdminSidebar = function () {
-  document.querySelector('.admin-sidebar')?.classList.toggle('open');
+  const sidebar = document.querySelector('.admin-sidebar');
+  if (!sidebar) return;
+  const isOpen = sidebar.classList.toggle('open');
+
+  // Add/remove backdrop
+  let backdrop = document.getElementById('sidebar-backdrop');
+  if (isOpen) {
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = 'sidebar-backdrop';
+      backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:199;';
+      backdrop.addEventListener('click', () => toggleAdminSidebar());
+      document.body.appendChild(backdrop);
+    }
+  } else if (backdrop) {
+    backdrop.remove();
+  }
 };
 
 // ── INIT ───────────────────────────────────────────────────────────────────
