@@ -1,0 +1,111 @@
+/* ── Cart Mobile Styles ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  .cart-page { padding: 1rem 0 3rem; }
+
+  /* Stack layout: table on top, summary below */
+  .cart-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  /* Remove card wrapper overflow so cards breathe */
+  .cart-table-wrap {
+    overflow: visible !important;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+
+  /* Hide table header */
+  .cart-table thead { display: none !important; }
+
+  /* Convert table → stacked cards */
+  .cart-table         { display: block !important; }
+  .cart-table tbody   { display: block !important; }
+  .cart-table tr {
+    display: flex !important;
+    flex-direction: column;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin-bottom: 0.85rem;
+    box-shadow: var(--shadow);
+    gap: 0.6rem;
+  }
+  .cart-table td {
+    display: flex !important;
+    width: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Product info cell — full row */
+  .cart-table td:first-child {
+    border-bottom: 1px solid var(--border) !important;
+    padding-bottom: 0.75rem !important;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Labels before price / qty / total cells */
+  .cart-table td[data-label="Price"]::before,
+  .cart-table td[data-label="Quantity"]::before,
+  .cart-table td[data-label="Total"]::before {
+    content: attr(data-label);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    flex-shrink: 0;
+  }
+
+  /* Cart item info */
+  .cart-item-thumb { width: 56px; height: 56px; }
+  .cart-item-name  { font-size: 0.95rem; }
+  .cart-item-unit  { font-size: 0.8rem; }
+
+  /* Qty controls — bigger tap targets */
+  .cart-qty-controls { margin-left: auto; }
+  .cart-qty-btn { width: 44px !important; height: 44px !important; font-size: 1.1rem; }
+  .cart-qty-val { width: 52px !important; height: 44px !important; font-size: 1rem; }
+
+  /* Remove button */
+  .btn-remove {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    margin-left: auto;
+    background: rgba(231,76,60,0.08);
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-remove:hover { background: rgba(231,76,60,0.2); }
+
+  /* Summary card */
+  .cart-summary {
+    position: static !important;
+    top: auto !important;
+  }
+  .cart-summary h3 { font-size: 1.1rem; }
+
+  /* Continue shopping + checkout buttons */
+  .btn-checkout,
+  .btn-continue-shopping {
+    display: flex !important;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    font-size: 1rem;
+  }
+  .btn-checkout { font-size: 1.05rem; padding: 0.9rem 1rem; }
+}
