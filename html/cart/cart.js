@@ -12,7 +12,7 @@
           <div class="empty-icon">🛒</div>
           <h3>Your cart is empty</h3>
           <p>Browse our products and add items to your cart.</p>
-          <a href="products.html" class="btn-primary">Browse Products</a>
+          <a href="../products/products.html" class="btn-primary">Browse Products</a>
         </div>`;
       renderSummary(0, 0);
       return;
@@ -44,7 +44,7 @@
 
       html += `
         <tr data-id="${product.id}">
-          <td>
+          <td data-label="Product">
             <div class="cart-item-info">
               <div class="cart-item-thumb">${thumbContent}</div>
               <div>
@@ -53,8 +53,8 @@
               </div>
             </div>
           </td>
-          <td class="cart-price">${formatRupees(product.price)}</td>
-          <td>
+          <td class="cart-price" data-label="Price">${formatRupees(product.price)}</td>
+          <td data-label="Quantity">
             <div class="cart-qty-controls">
               <button class="cart-qty-btn" onclick="changeQty(${product.id}, ${item.qty - 1})">−</button>
               <input class="cart-qty-val" type="number" value="${item.qty}" min="1" max="${product.stock}"
@@ -62,8 +62,8 @@
               <button class="cart-qty-btn" onclick="changeQty(${product.id}, ${item.qty + 1})">+</button>
             </div>
           </td>
-          <td class="cart-price">${formatRupees(itemTotal)}</td>
-          <td>
+          <td class="cart-price" data-label="Total">${formatRupees(itemTotal)}</td>
+          <td data-label="">
             <button class="btn-remove" onclick="removeItem(${product.id})">🗑</button>
           </td>
         </tr>`;
@@ -88,7 +88,7 @@
         <div class="cart-summary">
           <h3>Order Summary</h3>
           <p style="color:var(--text-muted);text-align:center;padding:1rem 0">Cart is empty</p>
-          <a href="products.html" class="btn-continue-shopping">← Browse Products</a>
+          <a href="../products/products.html" class="btn-continue-shopping">← Browse Products</a>
         </div>`;
       return;
     }
@@ -100,8 +100,8 @@
         <div class="summary-row"><span>Delivery Charges</span><span>${delivery === 0 ? '<span style="color:var(--success)">Free</span>' : formatRupees(delivery)}</span></div>
         ${delivery === 0 ? '<div style="font-size:0.78rem;color:var(--success);text-align:right;margin-top:-0.5rem;margin-bottom:0.5rem">Free delivery on orders above ₹5,000!</div>' : '<div style="font-size:0.78rem;color:var(--text-muted);text-align:right;margin-top:-0.5rem;margin-bottom:0.5rem">Free delivery above ₹5,000</div>'}
         <div class="summary-row total"><span>Total</span><span>${formatRupees(total)}</span></div>
-        <a href="checkout.html" class="btn-checkout">🛍 Proceed to Checkout</a>
-        <a href="products.html" class="btn-continue-shopping">← Continue Shopping</a>
+        <a href="../checkout/checkout.html" class="btn-checkout">🛍 Proceed to Checkout</a>
+        <a href="../products/products.html" class="btn-continue-shopping">← Continue Shopping</a>
         <button onclick="clearCartAction()" style="width:100%;background:none;border:none;color:var(--danger);font-size:0.85rem;margin-top:0.8rem;cursor:pointer;padding:0.3rem;font-family:var(--font)">🗑 Clear Cart</button>
       </div>`;
   }

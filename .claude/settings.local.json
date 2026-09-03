@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:script.google.com)",
-      "WebFetch(domain:script.googleusercontent.com)"
+      "WebFetch(domain:script.googleusercontent.com)",
+      "Bash(awk '/<script>/{f=1;next} /<\\\\/script>/{f=0} f' order-success.html)",
+      "Bash(node --check /tmp/os_check.js)",
+      "Bash(node --check js/app.js)",
+      "Bash(grep -rn \"document.write\" *.html)",
+      "Bash(xargs -I{} basename {})",
+      "Bash(ls \"c:\\\\Users\\\\C5375739\\\\OneDrive - SAP SE\\\\Blocks_and_Bricks_App\\\\html\\\\\" 2>/dev/null && echo \"---\" && ls \"c:\\\\Users\\\\C5375739\\\\OneDrive - SAP SE\\\\Blocks_and_Bricks_App\\\\js\\\\\" && echo \"---\" && ls \"c:\\\\Users\\\\C5375739\\\\OneDrive - SAP SE\\\\Blocks_and_Bricks_App\\\\\")",
+      "Read(//c/Users/C5375739/OneDrive - SAP SE/**)",
+      "Bash(grep -n \"src=\\\\\"js/\\\\|href=\\\\\"css/\\\\|src=\\\\\"../\\\\|href=\\\\\"../\" \"c:/Users/C5375739/OneDrive - SAP SE/Blocks_and_Bricks_App/html/admin.html\")"
     ]
   }
 }

@@ -147,7 +147,7 @@
           </div>
 
           <div style="display:flex;gap:0.8rem;margin-top:1.5rem;flex-wrap:wrap">
-            <a href="products.html" class="btn-primary" style="font-size:0.9rem;padding:0.65rem 1.4rem">🛒 Order Again</a>
+            <a href="../products/products.html" class="btn-primary" style="font-size:0.9rem;padding:0.65rem 1.4rem">🛒 Order Again</a>
             ${order.status === 'Delivered' ? `
             <button onclick="downloadInvoice('${order.id}')"
               style="background:var(--success,#27ae60);border:none;color:#fff;padding:0.65rem 1.4rem;border-radius:30px;font-weight:700;font-size:0.9rem;display:flex;align-items:center;gap:0.4rem;cursor:pointer">

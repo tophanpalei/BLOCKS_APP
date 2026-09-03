@@ -24,7 +24,7 @@
 # Root URL redirect → store homepage
 [[redirects]]
   from   = "/"
-  to     = "/html/store/index.html"
+  to     = "/html/index/index.html"
   status = 301
 
 # Cache settings

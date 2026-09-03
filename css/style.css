@@ -2365,6 +2365,117 @@ button { cursor: pointer; border: none; font-family: var(--font); }
   .admin-table-wrap { overflow-x: auto; }
 }
 
+/* ===== MOBILE OPTIMISATION (customer-facing) ===== */
+@media (max-width: 768px) {
+
+  /* ── Navbar ── */
+  .navbar { padding: 0 1rem; height: 60px; }
+  .nav-brand { font-size: 1.1rem; }
+  .nav-brand .brand-icon { width: 32px; height: 32px; font-size: 1rem; }
+  .nav-actions { gap: 0.35rem; }
+  .cart-btn { padding: 0.45rem 0.8rem; font-size: 0.82rem; border-radius: 20px; }
+  .theme-toggle { padding: 0.4rem; font-size: 1rem; }
+
+  /* Mobile nav menu — full-width, bigger tap targets */
+  .nav-links { top: 60px; z-index: 999; }
+  .nav-links a { padding: 0.85rem 1rem; font-size: 1rem; border-radius: 0; border-bottom: 1px solid var(--border); }
+  .nav-links a:last-child { border-bottom: none; }
+
+  /* ── Hero ── */
+  .hero { height: auto; min-height: 65vh; }
+  .slide-content { padding: 2rem 1.2rem; }
+  .slide-content h1 { font-size: 1.7rem; line-height: 1.25; }
+  .slide-content p { font-size: 0.9rem; }
+  .hero-btns { flex-direction: column; gap: 0.75rem; }
+  .hero-btns .btn-primary,
+  .hero-btns .btn-outline { width: 100%; justify-content: center; padding: 0.9rem 1rem; font-size: 1rem; }
+
+  /* ── Buttons — minimum 44px touch target ── */
+  .btn-primary { min-height: 44px; padding: 0.75rem 1.25rem; font-size: 0.95rem; }
+  .btn-outline  { min-height: 44px; padding: 0.75rem 1.25rem; font-size: 0.95rem; }
+  .btn-add-cart { min-height: 48px; font-size: 0.95rem; border-radius: 8px; }
+
+  /* ── All form inputs — 16px prevents iOS auto-zoom ── */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.85rem 1rem;
+    min-height: 48px;
+    border-radius: 8px;
+  }
+
+  /* ── Products grid — 2 columns on phones ── */
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .product-img-wrap { height: 150px; }
+  .product-info { padding: 0.85rem; }
+  .product-name { font-size: 0.88rem; }
+  .product-desc { font-size: 0.78rem; margin-bottom: 0.6rem; }
+  .product-price { font-size: 1.1rem; }
+  .product-actions { flex-direction: column; gap: 0.4rem; }
+
+  /* ── Category filter — horizontally scrollable ── */
+  .category-filter { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 0.5rem; }
+  .category-filter::-webkit-scrollbar { display: none; }
+  .filter-btn { white-space: nowrap; flex-shrink: 0; min-height: 40px; padding: 0.5rem 1rem; }
+
+  /* ── Cart — hide table, show card layout ── */
+  .cart-table thead { display: none; }
+  .cart-table, .cart-table tbody, .cart-table tr, .cart-table td { display: block; width: 100%; }
+  .cart-table tr { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 0.85rem; padding: 0.85rem; background: var(--card-bg); }
+  .cart-table td { padding: 0.3rem 0; border: none; }
+  .cart-table td[data-label]::before { content: attr(data-label); font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 0.2rem; }
+  .cart-table td:last-child { text-align: right; }
+
+  /* Cart qty controls — bigger touch targets */
+  .cart-qty-btn { width: 44px; height: 44px; font-size: 1.1rem; }
+  .cart-qty-val { width: 60px; height: 44px; font-size: 1rem; }
+
+  /* Cart layout */
+  .cart-layout { gap: 1rem; }
+  .cart-summary-card { position: static; }
+
+  /* ── Checkout ── */
+  .checkout-layout { gap: 1rem; }
+  .checkout-form-card { padding: 1.25rem; }
+  .order-summary-card  { padding: 1.25rem; }
+  .form-grid { grid-template-columns: 1fr; gap: 0.85rem; }
+  .btn-place-order { min-height: 52px; font-size: 1.05rem; width: 100%; justify-content: center; }
+
+  /* ── Track order ── */
+  .track-search-card { padding: 1.25rem; }
+  .track-tab { min-height: 42px; font-size: 0.9rem; }
+
+  /* ── Order success ── */
+  .success-card { padding: 1.5rem 1rem; }
+  .success-actions { flex-direction: column; gap: 0.75rem; }
+  .success-actions a,
+  .success-actions button { width: 100%; justify-content: center; }
+
+  /* ── Page header ── */
+  .page-header { padding: 1.5rem 0; }
+  .page-header h1 { font-size: 1.5rem; }
+
+  /* ── WhatsApp button ── */
+  .whatsapp-btn { bottom: 1.2rem; right: 1.2rem; width: 52px; height: 52px; font-size: 1.4rem; }
+
+  /* ── Section padding ── */
+  .section { padding: 2.5rem 0; }
+  .container { padding: 0 1rem; }
+}
+
+/* Extra small phones (iPhone SE, 360px wide) */
+@media (max-width: 390px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+  .product-img-wrap { height: 130px; }
+  .product-name { font-size: 0.82rem; }
+  .product-price { font-size: 1rem; }
+  .slide-content h1 { font-size: 1.45rem; }
+  .nav-brand font-size { font-size: 1rem; }
+}
+
 /* ===== UTILITIES ===== */
 .text-center { text-align: center; }
 .mt-1 { margin-top: 0.5rem; }

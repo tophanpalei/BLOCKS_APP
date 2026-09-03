@@ -32,7 +32,7 @@
 
         if (!order) {
           document.getElementById('order-details').innerHTML =
-            '<p style="text-align:center;padding:1.5rem;color:var(--text-muted)">Session expired — please <a href="index.html" style="color:var(--primary)">place a new order</a>.</p>';
+            '<p style="text-align:center;padding:1.5rem;color:var(--text-muted)">Session expired — please <a href="../index/index.html" style="color:var(--primary)">place a new order</a>.</p>';
           return;
         }
 

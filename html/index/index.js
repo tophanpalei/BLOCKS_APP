@@ -66,7 +66,7 @@
 
       return `
         <div class="product-card">
-          <div class="product-img-wrap" onclick="window.location='products.html'">
+          <div class="product-img-wrap" onclick="window.location='../products/products.html'">
             ${imgContent}
             <span class="product-badge">In Stock</span>
             <span class="product-category-badge" style="text-transform:capitalize">${product.category}</span>
@@ -80,7 +80,7 @@
             </div>
             <div class="product-actions">
               <button class="btn-add-cart" onclick="addToCart(${product.id}, 1)">🛒 Add to Cart</button>
-              <button class="btn-view" onclick="window.location='products.html'" title="View all">→</button>
+              <button class="btn-view" onclick="window.location='../products/products.html'" title="View all">→</button>
             </div>
           </div>
         </div>`;
