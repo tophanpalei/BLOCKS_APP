@@ -21,6 +21,12 @@
   command = "node build-config.js"
   publish = "."
 
+# Root URL redirect → store homepage
+[[redirects]]
+  from   = "/"
+  to     = "/html/store/index.html"
+  status = 301
+
 # Cache settings
 [[headers]]
   for = "/*.html"
